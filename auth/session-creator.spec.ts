@@ -1,15 +1,11 @@
-// tests/save-session.spec.ts
-import { test, expect } from '@playwright/test';
-import fs from 'fs';
+import { test, expect } from "@playwright/test";
+import fs from "fs";
 
-test('Save login session', async ({ page }) => {
+test("Save login session", async ({ page }) => {
+  await page.goto("http://172.31.32.64:70/");
 
-  
-  await page.goto('http://172.31.32.64:70/'); 
-
-  const empNo = '03-12833';
-  const empPassword = 'LayRi!11120830!!';
-
+  const empNo = "03-12833";
+  const empPassword = "LayRi!11120830!!";
 
   await expect(page).toHaveTitle(/ePayroll System/);
   await page.locator("#basic").fill(empNo);
@@ -19,5 +15,5 @@ test('Save login session', async ({ page }) => {
   await page.waitForTimeout(2000);
 
   // Save storage state to a file
-  await page.context().storageState({ path: 'auth.json' });
+  await page.context().storageState({ path: "auth.json" });
 });
