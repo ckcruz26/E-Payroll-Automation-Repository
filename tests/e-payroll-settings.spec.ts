@@ -2,6 +2,7 @@ import { test, expect } from "@playwright/test";
 import { faker } from "@faker-js/faker";
 import path from "path";
 
+
 test.describe.configure({ mode: "serial" });
 
 test.describe("Settings Suite", () => {
@@ -16,9 +17,21 @@ test.describe("Settings Suite", () => {
   const employmentTypes: string[] = ["MOA", "Permanent"];
   const employmentType: string = faker.helpers.arrayElement(employmentTypes);
   const randomNumber = faker.number.int({ min: 1, max: 6 });
+  const deductionName = `Deduction Type - ${randomNumber} Dummy Test`;
   const salaryTableName = `Salary Table - ${employmentType} Dummy ${randomNumber} Test`;
 
   const regexSalaryTable = /Salary Table - (MOA|Permanent) Dummy \d+ Test/;
+  const regexDeductionName = /Deduction Type - \d+ Dummy Test/;
+
+  const minMoney = 10000;
+  const maxMoney = 15000;
+
+  const randomValueMoney = faker.number.int({
+    min: minMoney,
+    max: maxMoney,
+  });
+
+  const randomValuePercent = faker.number.int({ min: 1, max: 5 });
 
   test("E-PAYROLL_SETTINGS_001", async ({ page }) => {
     goToLink(page, "salary-grade");
@@ -179,23 +192,397 @@ test.describe("Settings Suite", () => {
         `//*[@id="app"]/div/div[3]/div[1]/div[2]/div/div[1]/table/tbody/tr[${randomNumber}]/td[6]/button`
       );
 
-      const minMoney = 10000;
-      const maxMoney = 15000;
-
-      const randomValueMoney = faker.number.int({
-        min: minMoney,
-        max: maxMoney,
-      });
-      const randomValuePercent = faker.number.int({ min: 1, max: 5 });
-
       const baseRateMOAField = page.locator('//*[@id="step1"]/input');
       const premiumPercentageField = page.getByRole("textbox", {
         name: "Premium Percentage*",
       });
+
+      const saveButtonSalaryGrade = page.locator(
+        "xpath=/html/body/div[2]/div/div[2]/div[4]/button[2]"
+      );
+      const verifySaveChangeText = page.getByText(
+        "Are you sure you want to proceed?"
+      );
+      const modalSuccess = page.getByText("Salary Grade updated");
+
+      const stringValueMoney = randomValueMoney.toString();
+
+      await clickEditSpecificGradeMOA.click();
+      await baseRateMOAField.clear();
+      await baseRateMOAField.fill(stringValueMoney);
+      await page.waitForTimeout(1000);
+      await premiumPercentageField.fill(String(randomValuePercent));
+      await saveButtonSalaryGrade.click();
+      await verifySaveChangeText.isVisible();
+      await modalSuccess.isVisible();
+      await page.waitForTimeout(1000);
+    }
+  });
+
+  test.skip("E-PAYROLL_SETTINGS_008", async ({ page }) => {
+    goToLink(page, "salary-grade");
+
+    await page.waitForSelector(
+      '//*[@id="app"]/div/div[3]/div[1]/div[2]/div/div[1]/table/tbody/tr/td',
+      { state: "visible" }
+    );
+
+    //table for Salary Grade
+    const tableCells = page.locator(
+      '//*[@id="app"]/div/div[3]/div[1]/div[2]/div/div[1]/table/tbody/tr/td'
+    );
+
+    const salaryGradeEdit = page
+      .getByRole("row", { name: regexSalaryTable })
+      .getByLabel("Edit");
+
+    const rowsCount = await tableCells.count();
+
+    let tableEditFlag = 0;
+
+    for (let i = 0; i < rowsCount; i++) {
+      const rowLocator = tableCells.nth(i);
+      const cellText = await rowLocator.innerText();
+
+      if (regexSalaryTable.test(cellText)) {
+        await salaryGradeEdit.click();
+        tableEditFlag = 1;
+        break;
+      }
+    }
+
+    if (tableEditFlag == 1) {
+      // const clickEditSpecificGradePlantilla = page.locator( `//*[@id="app"]/div/div[3]/div[1]/div[2]/div/div[1]/table/tbody/tr[${randomNumber}]/td[10]/button`);
+
+      const clickEditSpecificGradeMOA = page.locator(
+        `//*[@id="app"]/div/div[3]/div[1]/div[2]/div/div[1]/table/tbody/tr[${randomNumber}]/td[6]/button`
+      );
+
+      const baseRateMOAField = page.locator('//*[@id="step1"]/input');
+
+      const saveButtonSalaryGrade = page.locator(
+        "xpath=/html/body/div[2]/div/div[2]/div[4]/button[2]"
+      );
+      const verifySaveChangeText = page.getByText(
+        "Are you sure you want to proceed?"
+      );
+      const modalSuccess = page.getByText("Salary Grade updated");
+
       await clickEditSpecificGradeMOA.click();
       await baseRateMOAField.fill(String(randomValueMoney));
       await page.waitForTimeout(1000);
-      await premiumPercentageField.fill(String(randomValuePercent));
+      await saveButtonSalaryGrade.click();
+      await verifySaveChangeText.isVisible();
+      await modalSuccess.isVisible();
+      await page.waitForTimeout(1000);
     }
   });
+
+  test("E-PAYROLL_SETTINGS_009", async ({ page }) => {
+    goToLink(page, "deduction-types");
+    await expect(page).toHaveURL(/.*\/deduction-types.*/);
+  });
+
+  test("E-PAYROLL_SETTINGS_010", async ({ page }) => {
+    goToLink(page, "deduction-types");
+    const searchFieldDeductions = page.getByRole("textbox");
+    const searchButton = page.getByRole("textbox");
+
+    await searchFieldDeductions.fill("SWEAP");
+    await searchButton.click();
+  });
+
+  test("E-PAYROLL_SETTINGS_011", async ({ page }) => {
+    goToLink(page, "deduction-types");
+    const createDeductionButton = page.getByRole("button", { name: "Create" });
+    const addDeductionModalHeader = page.getByText("Add Deduction");
+
+    await createDeductionButton.click();
+    await addDeductionModalHeader.isVisible();
+  });
+
+  test("E-PAYROLL_SETTINGS_012", async ({ page }) => {
+    goToLink(page, "deduction-types");
+    const createDeductionButton = page.getByRole("button", { name: "Create" });
+    const dialogAddDeductionNameField = page
+      .getByRole("dialog", { name: "Add Deduction" })
+      .getByRole("textbox");
+    const dialogStatusDeductionStatusDropdownBox = page.getByRole("combobox", {
+      name: "Active",
+    });
+    const dialogStatusDeductionStatusValue = page.getByRole("option", {
+      name: "Active",
+    });
+    const saveButtonDeduction = page.getByRole("button", { name: "Save" });
+    const alertDialogSaveButton = page
+      .getByRole("alertdialog", { name: "Confirmation" })
+      .getByLabel("Save");
+    const deductionSuccessMessage = page.getByText(
+      "Information has been saved"
+    );
+
+    await createDeductionButton.click();
+    await dialogAddDeductionNameField.fill(deductionName);
+    await dialogStatusDeductionStatusDropdownBox.click();
+    await dialogStatusDeductionStatusValue.click();
+    await saveButtonDeduction.click();
+    await alertDialogSaveButton.click();
+    await deductionSuccessMessage.click();
+  });
+
+  test("E-PAYROLL_SETTINGS_013", async ({ page }) => {
+    goToLink(page, "deduction-types");
+    const createDeductionButton = page.getByRole("button", { name: "Create" });
+    const saveButtonDeduction = page.getByRole("button", { name: "Save" });
+    const alertDialogSaveButton = page
+      .getByRole("alertdialog", { name: "Confirmation" })
+      .getByLabel("Save");
+    const allRequiredFieldsMsg = page.getByText("All fields are required");
+
+    await createDeductionButton.click();
+    await saveButtonDeduction.click();
+    await alertDialogSaveButton.click();
+    await allRequiredFieldsMsg.isVisible();
+    await page.waitForTimeout(2000);
+  });
+
+  test("E-PAYROLL_SETTINGS_014", async ({ page }) => {
+    goToLink(page, "deduction-types");
+
+    await page.waitForSelector(
+      '//*[@id="app"]/div/div[3]/div[1]/div[2]/div/div[1]/table/tbody/tr/td'
+    );
+    const dueductionCells = page.locator(
+      '//*[@id="app"]/div/div[3]/div[1]/div[2]/div/div[1]/table/tbody/tr/td'
+    );
+    const rowsCount = await dueductionCells.count();
+    const editButton = page.locator(
+      '//*[@id="app"]/div/div[3]/div[1]/div[2]/div/div[1]/table/tbody/tr[1]/td[4]/button'
+    );
+
+    for (var i = 0; i < rowsCount; i++) {
+      const rowLocator = dueductionCells.nth(i);
+      const cellText = await rowLocator.innerText();
+
+      if (regexDeductionName.test(cellText)) {
+        await editButton.click();
+        break;
+      }
+    }
+  });
+
+  test("E-PAYROLL_SETTINGS_015", async ({ page }) => {
+    goToLink(page, "deduction-types");
+    //deduction table
+    await page.waitForSelector(
+      '//*[@id="app"]/div/div[3]/div[1]/div[2]/div/div[1]/table/tbody/tr/td'
+    );
+    const dueductionCells = page.locator(
+      '//*[@id="app"]/div/div[3]/div[1]/div[2]/div/div[1]/table/tbody/tr/td'
+    );
+    const rowsCount = await dueductionCells.count();
+    const editButton = page.locator(
+      '//*[@id="app"]/div/div[3]/div[1]/div[2]/div/div[1]/table/tbody/tr[1]/td[4]/button'
+    );
+
+    let tableEditFlag = 0;
+
+    for (var i = 0; i < rowsCount; i++) {
+      const rowLocator = dueductionCells.nth(i);
+      const cellText = await rowLocator.innerText();
+
+      if (regexDeductionName.test(cellText)) {
+        await editButton.click();
+        tableEditFlag = 1;
+        break;
+      }
+    }
+
+    if (tableEditFlag == 1) {
+      const deductionEditNameField = page
+        .getByRole("dialog", { name: "Add Deduction" })
+        .getByRole("textbox");
+      const dialogStatusDeductionStatusDropdownBox = page.getByRole(
+        "combobox",
+        { name: "Active" }
+      );
+      const dialogStatusDeductionStatusValue = page.getByRole("option", {
+        name: "Inactive",
+      });
+      const editDialogSaveButton = page.getByRole("button", { name: "Save" });
+      const alertDialogSaveButton = page
+        .getByRole("alertdialog", { name: "Confirmation" })
+        .getByLabel("Save");
+      const textUpdate = page.getByText("Information has been saved");
+
+      await deductionEditNameField.fill(deductionName);
+      await dialogStatusDeductionStatusDropdownBox.click();
+      await dialogStatusDeductionStatusValue.click();
+      await editDialogSaveButton.click();
+      await alertDialogSaveButton.click();
+      await textUpdate.isVisible();
+    }
+  });
+
+  test("E-PAYROLL_SETTINGS_016", async ({ page }) => {
+    goToLink(page, "deduction-types");
+
+    await page.waitForSelector(
+      '//*[@id="app"]/div/div[3]/div[1]/div[2]/div/div[1]/table/tbody/tr/td'
+    );
+    const dueductionCells = page.locator(
+      '//*[@id="app"]/div/div[3]/div[1]/div[2]/div/div[1]/table/tbody/tr/td'
+    );
+    const rowsCount = await dueductionCells.count();
+    const editButton = page.locator(
+      '//*[@id="app"]/div/div[3]/div[1]/div[2]/div/div[1]/table/tbody/tr[1]/td[4]/button'
+    );
+
+    let tableEditFlag = 0;
+
+    for (var i = 0; i < rowsCount; i++) {
+      const rowLocator = dueductionCells.nth(i);
+      const cellText = await rowLocator.innerText();
+
+      if (regexDeductionName.test(cellText)) {
+        await editButton.click();
+        tableEditFlag = 1;
+        break;
+      }
+    }
+
+    if (tableEditFlag == 1) {
+      const deductionEditNameField = page
+        .getByRole("dialog", { name: "Add Deduction" })
+        .getByRole("textbox");
+      const dialogStatusDeductionStatusDropdownBox = page.getByRole(
+        "combobox",
+        { name: "Active" }
+      );
+      const dialogStatusDeductionStatusValue = page.getByRole("option", {
+        name: "Inactive",
+      });
+      const editDialogSaveButton = page.getByRole("button", { name: "Save" });
+      const alertDialogSaveButton = page
+        .getByRole("alertdialog", { name: "Confirmation" })
+        .getByLabel("Save");
+      const errorText = page.getByText("All fields are required");
+
+      await deductionEditNameField.clear();
+      await dialogStatusDeductionStatusDropdownBox.click();
+      await dialogStatusDeductionStatusValue.click();
+      await editDialogSaveButton.click();
+      await alertDialogSaveButton.click();
+      await errorText.isVisible();
+    }
+  });
+
+  test("E-PAYROLL_SETTINGS_017", async ({ page }) => {
+    goToLink(page, "deduction-types");
+    //deduction table
+    await page.waitForSelector(
+      '//*[@id="app"]/div/div[3]/div[1]/div[2]/div/div[1]/table/tbody/tr/td'
+    );
+    const dueductionCells = page.locator(
+      '//*[@id="app"]/div/div[3]/div[1]/div[2]/div/div[1]/table/tbody/tr/td'
+    );
+    const rowsCount = await dueductionCells.count();
+    const editButton = page.locator(
+      '//*[@id="app"]/div/div[3]/div[1]/div[2]/div/div[1]/table/tbody/tr[1]/td[4]/button'
+    );
+
+    let tableEditFlag = 0;
+
+    for (var i = 0; i < rowsCount; i++) {
+      const rowLocator = dueductionCells.nth(i);
+      const cellText = await rowLocator.innerText();
+
+      if (regexDeductionName.test(cellText)) {
+        await editButton.click();
+        tableEditFlag = 1;
+        break;
+      }
+    }
+
+    if (tableEditFlag == 1) {
+      const deductionEditNameField = page
+        .getByRole("dialog", { name: "Add Deduction" })
+        .getByRole("textbox");
+      const dialogStatusDeductionStatusDropdownBox = page.getByRole(
+        "combobox",
+        { name: "Active" }
+      );
+      const dialogStatusDeductionStatusValue = page.getByRole("option", {
+        name: "Inactive",
+      });
+      const editDialogSaveButton = page.getByRole("button", { name: "Save" });
+      const alertDialogSaveButton = page
+        .getByRole("alertdialog", { name: "Confirmation" })
+        .getByLabel("Save");
+      const textUpdate = page.getByText("Information has been saved");
+
+      await deductionEditNameField.fill(deductionName);
+      await dialogStatusDeductionStatusDropdownBox.click();
+      await dialogStatusDeductionStatusValue.click();
+      await editDialogSaveButton.click();
+      await alertDialogSaveButton.click();
+      await textUpdate.isVisible();
+    }
+  });
+
+  test("E-PAYROLL_SETTINGS_018", async ({ page }) => {
+    goToLink(page, "deduction-types");
+    // Get the filter dropdown box and options
+    const filterDropdownBox = page.getByRole("combobox", {
+      name: "Rows per page",
+    });
+    const optionValues = ["20", "50"];
+
+    for (const value of optionValues) {
+      await filterDropdownBox.click();
+      const option = page.getByRole("option", { name: value });
+      await option.click();
+      await page.waitForTimeout(500);
+    }
+  });
+
+  test("E-PAYROLL_SETTINGS_019", async ({page}) => {
+    goToLink(page, "upload-deductions")
+    const downloadTemplateButton = page.getByRole('button', { name: 'Download Template' })
+    await downloadTemplateButton.click();
+  })
+
+  test("E-PAYROLL_SETTINGS_020", async ({page}) => {
+    goToLink(page, "upload-deductions")
+    const fileInputButton = await page.locator('input[type="file"]'); 
+    const clickStartUpload = page.getByRole('button', { name: 'Start Upload' })
+    const currentDir = __dirname;
+    const parentDir = path.dirname(currentDir);
+    const inputFileValue = path.resolve(parentDir + "/test-data/deduction-template (1).csv");
+    const successIndicator = page.locator('div').filter({ hasText: /^Success, deduction data has been uploaded$/ }).nth(1)
+
+    await fileInputButton.setInputFiles(inputFileValue)
+    await clickStartUpload.click();
+    await successIndicator.isVisible();
+
+  })
+
+  test("E-PAYROLL_SETTINGS_021", async ({page}) => {
+    goToLink(page, "upload-deductions")
+    const fileInputButton = await page.locator('input[type="file"]'); 
+    const clickStartUpload = page.getByRole('button', { name: 'Start Upload' })
+    const currentDir = __dirname;
+    const parentDir = path.dirname(currentDir);
+    const inputFileValue = path.resolve(parentDir + "/test-data/testInvalid.txt");
+    const fileInputTextVisibility = page.getByText(`${path.basename(inputFileValue) }:`);
+
+    await fileInputButton.setInputFiles(inputFileValue)
+    await clickStartUpload.isDisabled();
+    await fileInputTextVisibility.isVisible();
+
+  })
+
+  test("E-PAYROLL_SETTINGS_022", async ({page}) => {
+    
+  })
 });
