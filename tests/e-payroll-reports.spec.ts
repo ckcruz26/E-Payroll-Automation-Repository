@@ -15,6 +15,10 @@ test.describe("Reports Suite", () => {
     await page.goto("http://172.31.32.64:70/reports");
   });
 
+  test.afterEach(async ({ page }) => {
+    await page.close(); // closes the current page after each test
+  });
+
   test("E-PAYROLL_REPORTS_001", async ({ page }) => {
     await expect(page).toHaveURL(/.*\/reports.*/);
     await page.waitForTimeout(2000);

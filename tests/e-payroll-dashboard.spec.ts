@@ -12,6 +12,10 @@ test.describe("Dashboard Suite", () => {
     await page.goto(`${process.env.URL}dashboard`);
   });
 
+  test.afterEach(async ({ page }) => {
+    await page.close(); // closes the current page after each test
+  });
+
   test("E-PAYROLL_DASHBOARD_001", async ({ page }) => {
     await expect(page).toHaveURL(/.*\/dashboard.*/);
     await page.waitForTimeout(2000);

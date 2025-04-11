@@ -13,6 +13,10 @@ test.describe("Settings Suite", () => {
     await page.goto(`http://172.31.32.64:70/settings/${variable}`);
   }
 
+  test.afterEach(async ({ page }) => {
+    await page.close(); // closes the current page after each test
+  });
+
   const employmentTypes: string[] = ["MOA", "Permanent"];
   const employmentType: string = faker.helpers.arrayElement(employmentTypes);
   const randomNumber = faker.number.int({ min: 1, max: 6 });

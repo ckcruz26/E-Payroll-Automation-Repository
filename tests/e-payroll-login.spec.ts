@@ -10,6 +10,10 @@ test.describe("Login Suite", () => {
     await page.goto(String(process.env.URL));
   });
 
+  test.afterEach(async ({ page }) => {
+    await page.close(); // closes the current page after each test
+  });
+
   test("E-PAYROLL_LOGIN_001", async ({ page }) => {
     await expect(page).toHaveTitle(/ePayroll System/);
     const empNoField = page.locator("#basic");
