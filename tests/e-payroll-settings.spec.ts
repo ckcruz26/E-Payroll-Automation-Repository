@@ -2,7 +2,6 @@ import { test, expect } from "@playwright/test";
 import { faker } from "@faker-js/faker";
 import path from "path";
 
-
 test.describe.configure({ mode: "serial" });
 
 test.describe("Settings Suite", () => {
@@ -32,7 +31,13 @@ test.describe("Settings Suite", () => {
   });
 
   const randomValuePercent = faker.number.int({ min: 1, max: 5 });
-  const searchUserRelevantData = ["03-11329", "ABAD", "ANGELICA", "TABANGAY", "IO1"]
+  const searchUserRelevantData = [
+    "03-11329",
+    "ABAD",
+    "ANGELICA",
+    "TABANGAY",
+    "IO1",
+  ];
 
   test("E-PAYROLL_SETTINGS_001", async ({ page }) => {
     goToLink(page, "salary-grade");
@@ -547,102 +552,190 @@ test.describe("Settings Suite", () => {
     }
   });
 
-  test("E-PAYROLL_SETTINGS_019", async ({page}) => {
-    goToLink(page, "upload-deductions")
-    const downloadTemplateButton = page.getByRole('button', { name: 'Download Template' })
+  test("E-PAYROLL_SETTINGS_019", async ({ page }) => {
+    goToLink(page, "upload-deductions");
+    const downloadTemplateButton = page.getByRole("button", {
+      name: "Download Template",
+    });
     await downloadTemplateButton.click();
-  })
+  });
 
-  test("E-PAYROLL_SETTINGS_020", async ({page}) => {
-    goToLink(page, "upload-deductions")
-    const fileInputButton = await page.locator('input[type="file"]'); 
-    const clickStartUpload = page.getByRole('button', { name: 'Start Upload' })
+  test("E-PAYROLL_SETTINGS_020", async ({ page }) => {
+    goToLink(page, "upload-deductions");
+    const fileInputButton = await page.locator('input[type="file"]');
+    const clickStartUpload = page.getByRole("button", { name: "Start Upload" });
     const currentDir = __dirname;
     const parentDir = path.dirname(currentDir);
-    const inputFileValue = path.resolve(parentDir + "/test-data/deduction-template (1).csv");
-    const successIndicator = page.locator('div').filter({ hasText: /^Success, deduction data has been uploaded$/ }).nth(1)
+    const inputFileValue = path.resolve(
+      parentDir + "/test-data/deduction-template (1).csv"
+    );
+    const successIndicator = page
+      .locator("div")
+      .filter({ hasText: /^Success, deduction data has been uploaded$/ })
+      .nth(1);
 
-    await fileInputButton.setInputFiles(inputFileValue)
+    await fileInputButton.setInputFiles(inputFileValue);
     await clickStartUpload.click();
     await successIndicator.isVisible();
+  });
 
-  })
-
-  test("E-PAYROLL_SETTINGS_021", async ({page}) => {
-    goToLink(page, "upload-deductions")
-    const fileInputButton = await page.locator('input[type="file"]'); 
-    const clickStartUpload = page.getByRole('button', { name: 'Start Upload' })
+  test("E-PAYROLL_SETTINGS_021", async ({ page }) => {
+    goToLink(page, "upload-deductions");
+    const fileInputButton = await page.locator('input[type="file"]');
+    const clickStartUpload = page.getByRole("button", { name: "Start Upload" });
     const currentDir = __dirname;
     const parentDir = path.dirname(currentDir);
-    const inputFileValue = path.resolve(parentDir + "/test-data/testInvalid.txt");
-    const fileInputTextVisibility = page.getByText(`${path.basename(inputFileValue) }:`);
+    const inputFileValue = path.resolve(
+      parentDir + "/test-data/testInvalid.txt"
+    );
+    const fileInputTextVisibility = page.getByText(
+      `${path.basename(inputFileValue)}:`
+    );
 
-    await fileInputButton.setInputFiles(inputFileValue)
+    await fileInputButton.setInputFiles(inputFileValue);
     await clickStartUpload.isDisabled();
     await fileInputTextVisibility.isVisible();
+  });
 
-  })
-
-  test("E-PAYROLL_SETTINGS_022", async ({page}) => {
-    goToLink(page, "optional-deductions")
-    const downloadTemplateButton = page.getByRole('button', { name: 'Download Template' })
+  test("E-PAYROLL_SETTINGS_022", async ({ page }) => {
+    goToLink(page, "optional-deductions");
+    const downloadTemplateButton = page.getByRole("button", {
+      name: "Download Template",
+    });
     await downloadTemplateButton.click();
-  })
+  });
 
-  test("E-PAYROLL_SETTINGS_023", async ({page}) => {
-    goToLink(page, "optional-deductions")
-    const fileInputButton = await page.locator('input[type="file"]'); 
-    const clickStartUpload = page.getByRole('button', { name: 'Start Upload' })
+  test("E-PAYROLL_SETTINGS_023", async ({ page }) => {
+    goToLink(page, "optional-deductions");
+    const fileInputButton = await page.locator('input[type="file"]');
+    const clickStartUpload = page.getByRole("button", { name: "Start Upload" });
     const currentDir = __dirname;
     const parentDir = path.dirname(currentDir);
-    const inputFileValue = path.resolve(parentDir + "/test-data/deduction-template (1).csv");
-    const successIndicator = page.locator('div').filter({ hasText: /^Success, deduction data has been uploaded$/ }).nth(1)
+    const inputFileValue = path.resolve(
+      parentDir + "/test-data/deduction-template (1).csv"
+    );
+    const successIndicator = page
+      .locator("div")
+      .filter({ hasText: /^Success, deduction data has been uploaded$/ })
+      .nth(1);
 
-    await fileInputButton.setInputFiles(inputFileValue)
+    await fileInputButton.setInputFiles(inputFileValue);
     await clickStartUpload.click();
     await successIndicator.isVisible();
+  });
 
-  })  
-
-  test("E-PAYROLL_SETTINGS_024", async ({page}) => {
-    goToLink(page, "optional-deductions")
-    const fileInputButton = await page.locator('input[type="file"]'); 
-    const clickStartUpload = page.getByRole('button', { name: 'Start Upload' })
+  test("E-PAYROLL_SETTINGS_024", async ({ page }) => {
+    goToLink(page, "optional-deductions");
+    const fileInputButton = await page.locator('input[type="file"]');
+    const clickStartUpload = page.getByRole("button", { name: "Start Upload" });
     const currentDir = __dirname;
     const parentDir = path.dirname(currentDir);
-    const inputFileValue = path.resolve(parentDir + "/test-data/testInvalid.txt");
-    const fileInputTextVisibility = page.getByText(`${path.basename(inputFileValue) }:`);
+    const inputFileValue = path.resolve(
+      parentDir + "/test-data/testInvalid.txt"
+    );
+    const fileInputTextVisibility = page.getByText(
+      `${path.basename(inputFileValue)}:`
+    );
 
-    await fileInputButton.setInputFiles(inputFileValue)
+    await fileInputButton.setInputFiles(inputFileValue);
     await clickStartUpload.isDisabled();
     await fileInputTextVisibility.isVisible();
-  })
+  });
 
-  test("E-PAYROLL_SETTINGS_025", async ({page}) =>{ 
-    goToLink(page, 'user-access')
+  test("E-PAYROLL_SETTINGS_025", async ({ page }) => {
+    goToLink(page, "user-access");
     await expect(page).toHaveURL(/.*\/user-access.*/);
-  })
+  });
 
-  test("E-PAYROLL_SETTINGS_026", async ({page}) => {
-    goToLink(page, 'user-access')
-    const numberComboBox = page.getByRole('combobox', { name: 'Rows per page' })
-    const numberComboBoxVal = ["20","50", "100"]
+  test("E-PAYROLL_SETTINGS_026", async ({ page }) => {
+    goToLink(page, "user-access");
+    const numberComboBox = page.getByRole("combobox", {
+      name: "Rows per page",
+    });
+    const numberComboBoxVal = ["20", "50", "100"];
 
     for (const num of numberComboBoxVal) {
-      await numberComboBox.click(); 
-      const optionComboBox = page.getByRole('option', { name: num });
-      
+      await numberComboBox.click();
+      const optionComboBox = page.getByRole("option", { name: num });
+
       await optionComboBox.click();
     }
-  })
+  });
 
-  test("E-PAYROLL_SETTINGS_027", async ({page}) => {
-    goToLink(page, 'user-access')
-    const searchFieldUser = page.getByRole('textbox', { name: 'Search' })
+  test("E-PAYROLL_SETTINGS_027", async ({ page }) => {
+    goToLink(page, "user-access");
+    const searchFieldUser = page.getByRole("textbox", { name: "Search" });
 
-    for (const data of searchUserRelevantData){
-        await searchFieldUser.fill(data)
+    for (const data of searchUserRelevantData) {
+      await searchFieldUser.fill(data);
     }
-  })
+  });
 
+  test("E-PAYROLL_SETTINGS_028", async ({ page }) => {
+    goToLink(page, "user-access");
+    await page.waitForSelector(
+      '//*[@id="app"]/div/div[3]/div[1]/div[2]/div/div[1]/table/tbody/tr/td'
+    );
+    const editButton = page.locator(
+      '//*[@id="app"]/div/div[3]/div[1]/div[2]/div/div[1]/table/tbody/tr[1]/td[6]/button'
+    );
+    const searchFieldUser = page.getByRole("textbox", { name: "Search" });
+    const empNo = "03-12456";
+
+    searchFieldUser.fill(empNo);
+    await editButton.click();
+  });
+
+  test("E-PAYROLL_SETTINGS_029", async ({ page }) => {
+    goToLink(page, "user-access");
+    await page.waitForSelector(
+      '//*[@id="app"]/div/div[3]/div[1]/div[2]/div/div[1]/table/tbody/tr/td'
+    );
+    const editButton = page.locator(
+      '//*[@id="app"]/div/div[3]/div[1]/div[2]/div/div[1]/table/tbody/tr[1]/td[6]/button'
+    );
+    const searchFieldUser = page.getByRole("textbox", { name: "Search" });
+    const empNo = "03-12456";
+    const bulkAccessModulesCheckbox = page.locator(
+      '//*[@id="pv_id_10_content"]/div/div[1]/div[1]/table/thead/tr/th[1]/div/div/input'
+    );
+    const saveAccessButton = page.getByRole("button", { name: "Save" });
+    const saveConfirmButton = page
+      .getByRole("alertdialog", { name: "Confirmation" })
+      .getByLabel("Save");
+    const successEditText = page.getByText("You have accepted").nth(1);
+
+    searchFieldUser.fill(empNo);
+    await editButton.click();
+    await bulkAccessModulesCheckbox.click();
+    await saveAccessButton.click();
+    await saveConfirmButton.click();
+    await successEditText.isVisible();
+  });
+
+  test("E-PAYROLL_SETTINGS_030", async ({ page }) => {
+    goToLink(page, "user-access");
+    await page.waitForSelector(
+      '//*[@id="app"]/div/div[3]/div[1]/div[2]/div/div[1]/table/tbody/tr/td'
+    );
+    const editButton = page.locator(
+      '//*[@id="app"]/div/div[3]/div[1]/div[2]/div/div[1]/table/tbody/tr[1]/td[6]/button'
+    );
+    const searchFieldUser = page.getByRole("textbox", { name: "Search" });
+    const empNo = "03-12456";
+    const filterAccessModules = page
+      .getByRole("region", { name: "Access" })
+      .getByLabel("Rows per page");
+    const optionValues = ["20", "50"];
+
+    searchFieldUser.fill(empNo);
+    await editButton.click();
+
+    for (const value of optionValues) {
+      await filterAccessModules.click();
+      const option = page.getByRole("option", { name: value });
+      await option.click();
+      await page.waitForTimeout(500);
+    }
+  });
 });
