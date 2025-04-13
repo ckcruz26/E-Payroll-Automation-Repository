@@ -16,7 +16,7 @@ export default defineConfig({
   use: {
     launchOptions: {
       args: ["--start-maximized"],
-      slowMo: 3000,
+      slowMo: 2000,
       headless: false,
     },
     trace: "on-first-retry", // Optional: Enables tracing for debugging
