@@ -1,12 +1,11 @@
 import { test, expect } from "@playwright/test";
 
 import path from "path";
+import { ReportsPage } from "../pages/ReportsPage";
 
 test.describe.configure({ mode: "serial" });
 
 test.describe("Reports Suite", () => {
-  const remittanceArr = ["Pag-ibig", "SSS", "Philhealth"];
-
   test.use({
     storageState: path.resolve(__dirname, "../auth/auth.json"),
   });
@@ -20,51 +19,18 @@ test.describe("Reports Suite", () => {
   });
 
   test("E-PAYROLL_REPORTS_001", async ({ page }) => {
-    await expect(page).toHaveURL(/.*\/reports.*/);
-    await page.waitForTimeout(2000);
+    const reports = new ReportsPage(page);
+    await reports.verifyReportsPage();
   });
 
   test("E-PAYROLL_REPORTS_002", async ({ page }) => {
-    const clickReports = page.locator(
-      '//*[@id="app"]/div/div[2]/div/div[1]/ul/li[4]/ul/li/a'
-    );
-
-    const searchField = page.getByPlaceholder("Search");
-
-    await clickReports.click();
-    await expect(page).toHaveURL(/.*\/reports.*/);
-
-    for (const searchRemittance of remittanceArr) {
-      await searchField.fill(searchRemittance);
-    }
-
-    await page.waitForTimeout(2000);
+    const reports = new ReportsPage(page);
+    await reports.searchReports();
   });
 
   test("E-PAYROLL_REPORTS_003", async ({ page }) => {
-    const cellsLocator = page.locator(
-      '//*[@id="app"]/div/div[3]/div[1]/div[2]/div/div[1]/table/tbody/tr/td'
-    );
-
-    await expect(page).toHaveURL(/.*\/reports.*/);
-
-    const rowsCount = await cellsLocator.count();
-
-    for (let i = 0; i < rowsCount; i++) {
-      const rowLocator = cellsLocator.nth(i);
-      const cellText = await rowLocator.innerText();
-
-      if (cellText.includes("Pag-ibig")) {
-        console.log(cellText);
-        const pagIbigClick = page.locator(
-          '//*[@id="app"]/div/div[3]/div[1]/div[2]/div/div[1]/table/tbody/tr[1]/td/a'
-        );
-        await pagIbigClick.click();
-        break;
-      }
-    }
-
-    await page.waitForTimeout(2000);
+    const reports = new ReportsPage(page);
+    await reports.selectionOfRemittance();
   });
 
   //[CCRUZ] - ADD (04-08-2025) on hold script, due to the capturing of dropdown boxes
@@ -147,35 +113,7 @@ test.describe("Reports Suite", () => {
   //[CCRUZ] - END (04-08-2025) on hold script, due to the capturing of dropdown boxes
 
   test("E-PAYROLL_REPORTS_007", async ({ page }) => {
-    const cellsLocator = page.locator(
-      '//*[@id="app"]/div/div[3]/div[1]/div[2]/div/div[1]/table/tbody/tr/td'
-    );
-
-    const generateButton = page.getByLabel("Generate");
-    const modalMessageError = page.locator(
-      "div:nth-child(3) > div > .p-toast-message > .p-toast-message-content"
-    );
-
-    await expect(page).toHaveURL(/.*\/reports.*/);
-
-    const rowsCount = await cellsLocator.count();
-
-    for (let i = 0; i < rowsCount; i++) {
-      const rowLocator = cellsLocator.nth(i);
-      const cellText = await rowLocator.innerText();
-
-      if (cellText.includes("Pag-ibig")) {
-        console.log(cellText);
-        const pagIbigClick = page.locator(
-          '//*[@id="app"]/div/div[3]/div[1]/div[2]/div/div[1]/table/tbody/tr[1]/td/a'
-        );
-        await pagIbigClick.click();
-        await generateButton.click();
-        await expect(modalMessageError).toContainText("All fields required");
-        break;
-      }
-    }
-
-    await page.waitForTimeout(2000);
+    const reports = new ReportsPage(page);
+    await reports.requiredFields();
   });
 });

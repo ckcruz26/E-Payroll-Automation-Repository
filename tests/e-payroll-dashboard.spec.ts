@@ -1,5 +1,6 @@
 import { test, expect } from "@playwright/test";
 import path from "path";
+import { DashboardPage } from "../pages/DashboardPage";
 
 test.describe.configure({ mode: "serial" });
 
@@ -17,17 +18,13 @@ test.describe("Dashboard Suite", () => {
   });
 
   test("E-PAYROLL_DASHBOARD_001", async ({ page }) => {
-    await expect(page).toHaveURL(/.*\/dashboard.*/);
-    await page.waitForTimeout(2000);
+    const dashboard = new DashboardPage(page);
+    await dashboard.verifyDashboardPage();
   });
 
   test("E-PAYROLL_DASHBOARD_002", async ({ page }) => {
-    const viewAll = page.locator(
-      '//*[@id="app"]/div/div[3]/div[1]/div[3]/div/div[1]/div/div/p[2]'
-    );
-    await expect(page).toHaveURL(/.*\/dashboard.*/);
-    await viewAll.click();
-    await expect(page).toHaveURL(/.*\/payroll-management.*/);
-    await page.waitForTimeout(2000);
+    const dashboard = new DashboardPage(page);
+    await dashboard.clickViewAll();
+    await dashboard.verifyPayrollManagementPage();
   });
 });
