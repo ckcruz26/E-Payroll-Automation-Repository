@@ -1,0 +1,27 @@
+  // Step 1: Click the input to open the date picker
+    // Start Date - input index 0
+    // await this.Page.click("input.p-datepicker-input >> nth=0");
+    // await this.Page.waitForSelector(".p-datepicker");
+
+  //   while (
+  //     !(await this.Page.locator(".p-datepicker-title").textContent()).includes(
+  //       "April"
+  //     ) ||
+  //     !(await this.Page.locator(".p-datepicker-title").textContent()).includes(
+  //       "2025"
+  //     )
+  //   ) {
+  //     await this.Page.click(".p-datepicker-next");
+  //   }
+
+  //   await this.Page.click('.p-datepicker-calendar td:has-text("14")');
+    
+
+  //   // End Date - input index 1
+  //   //await this.Page.locator('input.p-datepicker-input').fill('2024-04-21');
+
+  //   await this.Page.locator('#pv_id_21').getByRole('combobox').click();
+  //   await this.Page.getByRole('gridcell', { name: '15' }).click();
+  // }
+
+

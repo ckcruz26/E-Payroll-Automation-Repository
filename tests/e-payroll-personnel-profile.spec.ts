@@ -73,4 +73,9 @@ test.describe("Personnel Profile Suite", () => {
     await personnelProfile.inputOptionalDeductions();
   });
 
+  test('E-PAYROLL_PERSONNEL_PROFILE_013', async ({page}) => {
+
+
+  });
+
 });

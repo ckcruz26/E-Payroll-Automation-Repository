@@ -53,6 +53,7 @@ export class PersonnelProfile {
   readonly deductionTypeOptionValue: Locator;
   readonly totalAmountValue: Locator;
   readonly monthlyDeduction: Locator;
+  readonly buttonSaveOptionalDeduction: Locator;
 
   readonly minMoney = 100;
   readonly maxMoney = 200;
@@ -81,9 +82,6 @@ export class PersonnelProfile {
   //   "December",
   // ];
   // readonly yearsArr: Array<string> = ["2025", "2026"];
-  
-
- 
 
   constructor(page: Page) {
     this.Page = page;
@@ -153,8 +151,18 @@ export class PersonnelProfile {
     this.deductionTypeOptionValue = page.getByRole("option", {
       name: this.optionalDeductionNameArr[this.randomIndex],
     });
-    this.totalAmountValue = page.locator('div').filter({ hasText: /^Total Amount \*$/ }).locator('#minmaxfraction')
-    this.monthlyDeduction = page.locator('div').filter({ hasText: /^Monthly Deduction \*$/ }).locator('#minmaxfraction')
+    this.totalAmountValue = page
+      .locator("div")
+      .filter({ hasText: /^Total Amount \*$/ })
+      .locator("#minmaxfraction");
+    this.monthlyDeduction = page
+      .locator("div")
+      .filter({ hasText: /^Monthly Deduction \*$/ })
+      .locator("#minmaxfraction");
+
+    this.buttonSaveOptionalDeduction = page
+      .getByRole("dialog", { name: "Optional Deductions" })
+      .getByLabel("Save");
   }
 
   async verifyPersonnelProfilePage() {
@@ -242,50 +250,68 @@ export class PersonnelProfile {
   }
 
   async inputOptionalDeductions() {
+    console.log(">>> Starting inputOptionalDeductions");
+
+    // Step 1: Search and open modal
+    await this.searchFieldFirstName.waitFor({ state: "visible" });
     await this.searchFieldFirstName.fill(this.searchFieldNameArr[1]);
     await this.searchButton.click();
+
+    await this.deductionModalView.waitFor({ state: "visible" });
     await this.deductionModalView.click();
+
+    // Step 2: Open optional deduction section
+    await this.optionalDeductionBttn.waitFor({ state: "visible" });
     await this.optionalDeductionBttn.click();
+
+    // Step 3: Select deduction type
+    await this.deductionTypeOption.waitFor({ state: "visible" });
     await this.deductionTypeOption.click();
+
+    await this.deductionTypeOptionValue.waitFor({ state: "visible" });
     await this.deductionTypeOptionValue.click();
-    await this.totalAmountValue.fill(this.randomValueMoney.toString());
-    await this.monthlyDeduction.fill(this.randomValueMoney.toString());
-    // Step 1: Click the input to open the date picker
-    // Start Date - input index 0
-    // await this.Page.click("input.p-datepicker-input >> nth=0");
-    // await this.Page.waitForSelector(".p-datepicker");
 
-  //   while (
-  //     !(await this.Page.locator(".p-datepicker-title").textContent()).includes(
-  //       "April"
-  //     ) ||
-  //     !(await this.Page.locator(".p-datepicker-title").textContent()).includes(
-  //       "2025"
-  //     )
-  //   ) {
-  //     await this.Page.click(".p-datepicker-next");
-  //   }
+    // Step 4: Enter total amount
+    await this.totalAmountValue.waitFor({ state: "visible" });
+    await this.totalAmountValue.click();
+    await this.totalAmountValue.pressSequentially(
+      this.randomValueMoney.toString()
+    );
+    await this.totalAmountValue.press("Tab");
 
-  //   await this.Page.click('.p-datepicker-calendar td:has-text("14")');
+    // Step 5: Enter monthly deduction
+    await this.monthlyDeduction.waitFor({ state: "visible" });
+    await this.monthlyDeduction.click();
+    await this.monthlyDeduction.pressSequentially(
+      this.randomValueMoney.toString()
+    );
+    await this.monthlyDeduction.press("Tab");
+
+    // Step 1: Open the first date picker and select the start date
+    //start
+    // await this.Page.locator("xpath=//*[@id='pv_id_22']/button").getByRole("button", { name: "Choose Date" }).click();
+    // await this.Page.getByRole("gridcell", { name: "16" }).click();
+    //end
+   // await this.Page.locator("xpath=//*[@id='pv_id_23']/button").click();
+    // await this.Page.getByRole('gridcell', { name: '23' }).click();
     
+    await this.Page.evaluate(() => {
+      const inputs = document.querySelectorAll('.p-datepicker-input');
+      const targetInput = Array.from(inputs).find(i => i.getAttribute('aria-expanded') === 'true') as HTMLInputElement;
+    
+      if (targetInput) {
+        targetInput.value = '2025-04-14'; // Use the format accepted by your datepicker
+        targetInput.dispatchEvent(new Event('input', { bubbles: true }));
+        targetInput.dispatchEvent(new Event('change', { bubbles: true }));
+      }
+    });
 
-  //   // End Date - input index 1
-  //   //await this.Page.locator('input.p-datepicker-input').fill('2024-04-21');
+    
+    // Step 8: Save
+    await this.buttonSaveOptionalDeduction.waitFor({ state: "visible" });
+    await this.buttonSaveOptionalDeduction.click();
 
-  //   await this.Page.locator('#pv_id_21').getByRole('combobox').click();
-  //   await this.Page.getByRole('gridcell', { name: '15' }).click();
-  // }
-
-
-
-  //start
-  await this.Page.locator('#pv_id_18').getByRole('button', { name: 'Choose Date' }).click();
-  await this.Page.getByRole('gridcell', { name: '16' }).click();
-  //end
-  await this.Page.locator('#pv_id_19').getByRole('button', { name: 'Choose Date' }).click();
-  // await this.Page.getByRole('gridcell', { name: '23' }).click();
-  await this.Page.getByRole('gridcell', { name: '24' }).click();
-
+    console.log(">>> inputOptionalDeductions completed");
   }
-
 }
+//*[@id="pv_id_22"]/button
