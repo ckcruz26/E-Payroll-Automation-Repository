@@ -4,11 +4,12 @@ import { LoginPage } from "../pages/LoginPage";
 test.describe.configure({ mode: "serial" });
 
 test.describe("Login Suite", () => {
+  const url = String(process.env.URL);
   const empNo = String(process.env.EMPLOYEE_ID);
   const empPassword = String(process.env.PASSWORD);
 
   test.beforeEach(async ({ page }) => {
-    await page.goto(String(process.env.URL));
+    await page.goto(url);
   });
 
   test.afterEach(async ({ page }) => {

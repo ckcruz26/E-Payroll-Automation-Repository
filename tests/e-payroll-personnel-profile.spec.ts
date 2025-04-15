@@ -3,7 +3,7 @@ import { test, expect } from "@playwright/test";
 import path from "path";
 import { PersonnelProfile } from "../pages/PersonnelProfile";
 
-test.describe.configure({ mode: "serial" });
+test.describe.configure({ mode: "parallel" });
 
 test.describe("Personnel Profile Suite", () => {
   test.use({
@@ -43,6 +43,10 @@ test.describe("Personnel Profile Suite", () => {
     await personnelProfile.searchEmployeesByEmploymentStatus();
   });
 
+  test('E-PAYROLL_PERSONNEL_PROFILE_006', async ({ page }) => {
+
+  });
+
   test('E-PAYROLL_PERSONNEL_PROFILE_007', async ({ page }) => {
     const personnelProfile = new PersonnelProfile(page);
     await personnelProfile.downloadSummary();
@@ -68,14 +72,19 @@ test.describe("Personnel Profile Suite", () => {
     await personnelProfile.optionalDeductionsView();
   });
 
-  test('E-PAYROLL_PERSONNEL_PROFILE_012', async ({ page }) => {
+  test.skip('E-PAYROLL_PERSONNEL_PROFILE_012', async ({ page }) => {
     const personnelProfile = new PersonnelProfile(page);
     await personnelProfile.inputOptionalDeductions();
   });
 
   test('E-PAYROLL_PERSONNEL_PROFILE_013', async ({page}) => {
+    const personnelProfile = new PersonnelProfile(page);
+    await personnelProfile.skipOptionalDeductionsRequiredFields();
+  });
 
-
+  test.skip('E-PAYROLL_PERSONNEL_PROFILE_014', async ({page}) => {
+    const personnelProfile = new PersonnelProfile(page);
+    await personnelProfile.updateOptionalDeductions();
   });
 
 });

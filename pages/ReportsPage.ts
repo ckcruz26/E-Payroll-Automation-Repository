@@ -32,7 +32,6 @@ export class ReportsPage {
   }
 
   async searchReports() {
-    await this.clickReports.click();
     await expect(this.Page).toHaveURL(/.*\/reports.*/);
 
     for (const searchRemittance of this.remittanceArr) {

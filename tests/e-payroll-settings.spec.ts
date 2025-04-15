@@ -44,12 +44,12 @@ test.describe("Settings Suite", () => {
   ];
 
   test("E-PAYROLL_SETTINGS_001", async ({ page }) => {
-    goToLink(page, "salary-grade");
+    await goToLink(page, "salary-grade");
     await expect(page).toHaveURL(/.*\/salary-grade.*/);
   });
 
   test("E-PAYROLL_SETTINGS_002", async ({ page }) => {
-    goToLink(page, "salary-grade");
+    await goToLink(page, "salary-grade");
     const searchFieldName = page.locator(
       '//*[@id="app"]/div/div[3]/div[1]/div[1]/div[2]/div[1]/input'
     );
@@ -77,7 +77,7 @@ test.describe("Settings Suite", () => {
   });
 
   test("E-PAYROLL_SETTINGS_003", async ({ page }) => {
-    goToLink(page, "salary-grade");
+    await goToLink(page, "salary-grade");
     const clickCreate = page.getByRole("button", { name: "Create" });
     const createSalaryGradeTxt = page.getByText("Create Salary Grade Table");
     await createSalaryGradeTxt.isVisible();
@@ -85,7 +85,7 @@ test.describe("Settings Suite", () => {
   });
 
   test("E-PAYROLL_SETTINGS_004", async ({ page }) => {
-    goToLink(page, "salary-grade");
+    await goToLink(page, "salary-grade");
 
     const clickCreate = page.getByRole("button", { name: "Create" });
     const nameSalaryGrade = page.getByRole("textbox", {
@@ -111,7 +111,7 @@ test.describe("Settings Suite", () => {
   });
 
   test("E-PAYROLL_SETTINGS_005", async ({ page }) => {
-    goToLink(page, "salary-grade");
+    await goToLink(page, "salary-grade");
 
     const clickCreate = page.getByRole("button", { name: "Create" });
     const nameSalaryGrade = page.getByRole("textbox", {
@@ -133,7 +133,7 @@ test.describe("Settings Suite", () => {
   });
 
   test("E-PAYROLL_SETTINGS_006", async ({ page }) => {
-    goToLink(page, "salary-grade");
+    await goToLink(page, "salary-grade");
 
     await page.waitForSelector(
       '//*[@id="app"]/div/div[3]/div[1]/div[2]/div/div[1]/table/tbody/tr/td',
@@ -164,7 +164,7 @@ test.describe("Settings Suite", () => {
   });
 
   test("E-PAYROLL_SETTINGS_007", async ({ page }) => {
-    goToLink(page, "salary-grade");
+    await goToLink(page, "salary-grade");
 
     await page.waitForSelector(
       '//*[@id="app"]/div/div[3]/div[1]/div[2]/div/div[1]/table/tbody/tr/td',
@@ -230,7 +230,7 @@ test.describe("Settings Suite", () => {
   });
 
   test.skip("E-PAYROLL_SETTINGS_008", async ({ page }) => {
-    goToLink(page, "salary-grade");
+    await goToLink(page, "salary-grade");
 
     await page.waitForSelector(
       '//*[@id="app"]/div/div[3]/div[1]/div[2]/div/div[1]/table/tbody/tr/td',
@@ -289,12 +289,12 @@ test.describe("Settings Suite", () => {
   });
 
   test("E-PAYROLL_SETTINGS_009", async ({ page }) => {
-    goToLink(page, "deduction-types");
+    await goToLink(page, "deduction-types");
     await expect(page).toHaveURL(/.*\/deduction-types.*/);
   });
 
   test("E-PAYROLL_SETTINGS_010", async ({ page }) => {
-    goToLink(page, "deduction-types");
+    await goToLink(page, "deduction-types");
     const searchFieldDeductions = page.getByRole("textbox");
     const searchButton = page.getByRole("textbox");
 
@@ -303,7 +303,7 @@ test.describe("Settings Suite", () => {
   });
 
   test("E-PAYROLL_SETTINGS_011", async ({ page }) => {
-    goToLink(page, "deduction-types");
+    await goToLink(page, "deduction-types");
     const createDeductionButton = page.getByRole("button", { name: "Create" });
     const addDeductionModalHeader = page.getByText("Add Deduction");
 
@@ -312,7 +312,7 @@ test.describe("Settings Suite", () => {
   });
 
   test("E-PAYROLL_SETTINGS_012", async ({ page }) => {
-    goToLink(page, "deduction-types");
+    await goToLink(page, "deduction-types");
     const createDeductionButton = page.getByRole("button", { name: "Create" });
     const dialogAddDeductionNameField = page
       .getByRole("dialog", { name: "Add Deduction" })
@@ -341,7 +341,7 @@ test.describe("Settings Suite", () => {
   });
 
   test("E-PAYROLL_SETTINGS_013", async ({ page }) => {
-    goToLink(page, "deduction-types");
+    await goToLink(page, "deduction-types");
     const createDeductionButton = page.getByRole("button", { name: "Create" });
     const saveButtonDeduction = page.getByRole("button", { name: "Save" });
     const alertDialogSaveButton = page
@@ -357,7 +357,7 @@ test.describe("Settings Suite", () => {
   });
 
   test("E-PAYROLL_SETTINGS_014", async ({ page }) => {
-    goToLink(page, "deduction-types");
+    await goToLink(page, "deduction-types");
 
     await page.waitForSelector(
       '//*[@id="app"]/div/div[3]/div[1]/div[2]/div/div[1]/table/tbody/tr/td'
@@ -382,7 +382,7 @@ test.describe("Settings Suite", () => {
   });
 
   test("E-PAYROLL_SETTINGS_015", async ({ page }) => {
-    goToLink(page, "deduction-types");
+    await goToLink(page, "deduction-types");
     //deduction table
     await page.waitForSelector(
       '//*[@id="app"]/div/div[3]/div[1]/div[2]/div/div[1]/table/tbody/tr/td'
@@ -435,7 +435,7 @@ test.describe("Settings Suite", () => {
   });
 
   test("E-PAYROLL_SETTINGS_016", async ({ page }) => {
-    goToLink(page, "deduction-types");
+    await goToLink(page, "deduction-types");
 
     await page.waitForSelector(
       '//*[@id="app"]/div/div[3]/div[1]/div[2]/div/div[1]/table/tbody/tr/td'
@@ -488,7 +488,7 @@ test.describe("Settings Suite", () => {
   });
 
   test("E-PAYROLL_SETTINGS_017", async ({ page }) => {
-    goToLink(page, "deduction-types");
+    await goToLink(page, "deduction-types");
     //deduction table
     await page.waitForSelector(
       '//*[@id="app"]/div/div[3]/div[1]/div[2]/div/div[1]/table/tbody/tr/td'
@@ -541,7 +541,7 @@ test.describe("Settings Suite", () => {
   });
 
   test("E-PAYROLL_SETTINGS_018", async ({ page }) => {
-    goToLink(page, "deduction-types");
+    await goToLink(page, "deduction-types");
     // Get the filter dropdown box and options
     const filterDropdownBox = page.getByRole("combobox", {
       name: "Rows per page",
@@ -557,7 +557,7 @@ test.describe("Settings Suite", () => {
   });
 
   test("E-PAYROLL_SETTINGS_019", async ({ page }) => {
-    goToLink(page, "upload-deductions");
+    await goToLink(page, "upload-deductions");
     const downloadTemplateButton = page.getByRole("button", {
       name: "Download Template",
     });
@@ -565,7 +565,7 @@ test.describe("Settings Suite", () => {
   });
 
   test("E-PAYROLL_SETTINGS_020", async ({ page }) => {
-    goToLink(page, "upload-deductions");
+    await goToLink(page, "upload-deductions");
     const fileInputButton = await page.locator('input[type="file"]');
     const clickStartUpload = page.getByRole("button", { name: "Start Upload" });
     const currentDir = __dirname;
@@ -584,7 +584,7 @@ test.describe("Settings Suite", () => {
   });
 
   test("E-PAYROLL_SETTINGS_021", async ({ page }) => {
-    goToLink(page, "upload-deductions");
+    await goToLink(page, "upload-deductions");
     const fileInputButton = await page.locator('input[type="file"]');
     const clickStartUpload = page.getByRole("button", { name: "Start Upload" });
     const currentDir = __dirname;
@@ -602,7 +602,7 @@ test.describe("Settings Suite", () => {
   });
 
   test("E-PAYROLL_SETTINGS_022", async ({ page }) => {
-    goToLink(page, "optional-deductions");
+    await goToLink(page, "optional-deductions");
     const downloadTemplateButton = page.getByRole("button", {
       name: "Download Template",
     });
@@ -610,7 +610,7 @@ test.describe("Settings Suite", () => {
   });
 
   test("E-PAYROLL_SETTINGS_023", async ({ page }) => {
-    goToLink(page, "optional-deductions");
+    await goToLink(page, "optional-deductions");
     const fileInputButton = await page.locator('input[type="file"]');
     const clickStartUpload = page.getByRole("button", { name: "Start Upload" });
     const currentDir = __dirname;
@@ -629,7 +629,7 @@ test.describe("Settings Suite", () => {
   });
 
   test("E-PAYROLL_SETTINGS_024", async ({ page }) => {
-    goToLink(page, "optional-deductions");
+    await goToLink(page, "optional-deductions");
     const fileInputButton = await page.locator('input[type="file"]');
     const clickStartUpload = page.getByRole("button", { name: "Start Upload" });
     const currentDir = __dirname;
@@ -647,12 +647,12 @@ test.describe("Settings Suite", () => {
   });
 
   test("E-PAYROLL_SETTINGS_025", async ({ page }) => {
-    goToLink(page, "user-access");
+    await goToLink(page, "user-access");
     await expect(page).toHaveURL(/.*\/user-access.*/);
   });
 
   test("E-PAYROLL_SETTINGS_026", async ({ page }) => {
-    goToLink(page, "user-access");
+    await goToLink(page, "user-access");
     const numberComboBox = page.getByRole("combobox", {
       name: "Rows per page",
     });
@@ -667,7 +667,7 @@ test.describe("Settings Suite", () => {
   });
 
   test("E-PAYROLL_SETTINGS_027", async ({ page }) => {
-    goToLink(page, "user-access");
+    await goToLink(page, "user-access");
     const searchFieldUser = page.getByRole("textbox", { name: "Search" });
 
     for (const data of searchUserRelevantData) {
@@ -676,7 +676,7 @@ test.describe("Settings Suite", () => {
   });
 
   test("E-PAYROLL_SETTINGS_028", async ({ page }) => {
-    goToLink(page, "user-access");
+    await goToLink(page, "user-access");
     await page.waitForSelector(
       '//*[@id="app"]/div/div[3]/div[1]/div[2]/div/div[1]/table/tbody/tr/td'
     );
@@ -691,7 +691,7 @@ test.describe("Settings Suite", () => {
   });
 
   test("E-PAYROLL_SETTINGS_029", async ({ page }) => {
-    goToLink(page, "user-access");
+    await goToLink(page, "user-access");
     await page.waitForSelector(
       '//*[@id="app"]/div/div[3]/div[1]/div[2]/div/div[1]/table/tbody/tr/td'
     );
@@ -718,7 +718,7 @@ test.describe("Settings Suite", () => {
   });
 
   test("E-PAYROLL_SETTINGS_030", async ({ page }) => {
-    goToLink(page, "user-access");
+    await goToLink(page, "user-access");
     await page.waitForSelector(
       '//*[@id="app"]/div/div[3]/div[1]/div[2]/div/div[1]/table/tbody/tr/td'
     );

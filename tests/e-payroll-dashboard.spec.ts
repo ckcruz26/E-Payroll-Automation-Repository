@@ -10,7 +10,7 @@ test.describe("Dashboard Suite", () => {
   });
 
   test.beforeEach(async ({ page }) => {
-    await page.goto(`${process.env.URL}dashboard`);
+    await page.goto(`http://172.31.32.64:70/dashboard`);
   });
 
   test.afterEach(async ({ page }) => {

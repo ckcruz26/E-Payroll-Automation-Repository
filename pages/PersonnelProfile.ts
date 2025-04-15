@@ -55,6 +55,11 @@ export class PersonnelProfile {
   readonly monthlyDeduction: Locator;
   readonly buttonSaveOptionalDeduction: Locator;
 
+  readonly errMsgOptionalDeduction: Locator;
+
+  readonly updateOptionalDeductionBttn: Locator;
+  readonly deleteOptionalDeduction: Locator;
+
   readonly minMoney = 100;
   readonly maxMoney = 200;
 
@@ -70,18 +75,6 @@ export class PersonnelProfile {
     min: this.minMoney,
     max: this.maxMoney,
   });
-
-  // readonly monthsArr: Array<string> = [
-  //   "May",
-  //   "June",
-  //   "July",
-  //   "August",
-  //   "September",
-  //   "October",
-  //   "November",
-  //   "December",
-  // ];
-  // readonly yearsArr: Array<string> = ["2025", "2026"];
 
   constructor(page: Page) {
     this.Page = page;
@@ -99,29 +92,24 @@ export class PersonnelProfile {
       .filter({ hasText: /^Middle Name$/ })
       .getByRole("textbox");
 
-    this.searchPayrollGroupDropdown = page
-      .locator("#pv_id_4")
-      .getByRole("combobox", {
-        name: "Please select",
-      });
+    this.searchPayrollGroupDropdown = page.getByRole("combobox", {
+      name: "Select Group",
+    });
+
     this.searchPayrollGroupDropdownValue = page.getByRole("option", {
       name: "POLICY AND PLANS DIVISION",
     });
 
-    this.searchFundSourceDropdown = page
-      .locator("#pv_id_5")
-      .getByRole("combobox", {
-        name: "Please select",
-      });
+    this.searchFundSourceDropdown = page.getByRole("combobox", {
+      name: "Select Fund Source",
+    });
     this.searchFundSourceDropdownValue = page.getByRole("option", {
       name: "ICTMS",
     });
 
-    this.searchEmploymentStatusDropdown = page
-      .locator("#pv_id_6")
-      .getByRole("combobox", {
-        name: "Please select",
-      });
+    this.searchEmploymentStatusDropdown = page.getByRole("combobox", {
+      name: "Select Status",
+    });
 
     this.searchEmploymentStatusDropdownValue = page.getByRole("option", {
       name: "CONTRACT OF SERVICE",
@@ -163,6 +151,13 @@ export class PersonnelProfile {
     this.buttonSaveOptionalDeduction = page
       .getByRole("dialog", { name: "Optional Deductions" })
       .getByLabel("Save");
+
+    this.errMsgOptionalDeduction = page
+      .getByText("All fields are required")
+      .nth(1);
+    this.updateOptionalDeductionBttn = page.getByRole("button", {
+      name: "Edit",
+    });
   }
 
   async verifyPersonnelProfilePage() {
@@ -181,7 +176,11 @@ export class PersonnelProfile {
 
   async searchEmployeesByPayrollGroup() {
     await expect(this.Page).toHaveURL(/.*\/personnel-management.*/);
+
+    await this.searchPayrollGroupDropdown.waitFor({ state: "visible" });
     await this.searchPayrollGroupDropdown.click();
+
+    await this.searchPayrollGroupDropdownValue.waitFor({ state: "visible" });
     await this.searchPayrollGroupDropdownValue.click();
   }
 
@@ -207,29 +206,83 @@ export class PersonnelProfile {
     await expect(this.Page).toHaveURL(/.*\/personnel-management.*/);
     await this.searchFieldFirstName.fill(this.searchFieldNameArr[1]);
     await this.searchButton.click();
-    await this.deductionModalView.click();
     await this.Page.waitForTimeout(2000);
+    await this.deductionModalView.click();
   }
 
   async inputDeduction() {
+    this.Page.setDefaultTimeout(60000); // Optional: Increase global timeout
+  
+    console.log("Filling first name and searching...");
     await this.searchFieldFirstName.fill(this.searchFieldNameArr[1]);
     await this.searchButton.click();
+    await this.Page.waitForTimeout(2000);
+  
+    console.log("Opening deduction modal...");
     await this.deductionModalView.click();
-
-    await this.phic.fill(this.randomValueMoney.toString());
-    await this.pagibig.fill(this.randomValueMoney.toString());
-    await this.hdmf_mp2.fill(this.randomValueMoney.toString());
-    await this.sweap_mpc_premium.fill(this.randomValueMoney.toString());
-    await this.healthcard.fill(this.randomValueMoney.toString());
-    await this.sss.fill(this.randomValueMoney.toString());
+  
+    console.log("Filling PHIC...");
+    await this.phic.waitFor({ state: "visible", timeout: 10000 });
+    await this.phic.click();
+    await this.phic.fill("");
+    await this.phic.focus();
+    await this.phic.pressSequentially(this.randomValueMoney.toString());
+    await this.phic.press("Tab");
+  
+    console.log("Filling PAG-IBIG...");
+    await this.pagibig.waitFor({ state: "visible", timeout: 10000 });
+    await this.pagibig.click();
+    await this.pagibig.fill("");
+    await this.pagibig.focus();
+    await this.pagibig.pressSequentially(this.randomValueMoney.toString());
+    await this.pagibig.press("Tab");
+  
+    console.log("Filling HDMF MP2...");
+    await this.hdmf_mp2.waitFor({ state: "visible", timeout: 10000 });
+    await this.hdmf_mp2.click();
+    await this.hdmf_mp2.fill("");
+    await this.hdmf_mp2.focus();
+    await this.hdmf_mp2.pressSequentially(this.randomValueMoney.toString());
+    await this.hdmf_mp2.press("Tab");
+  
+    console.log("Filling SWEAP MPC Premium...");
+    await this.sweap_mpc_premium.waitFor({ state: "visible", timeout: 10000 });
+    await this.sweap_mpc_premium.click();
+    await this.sweap_mpc_premium.fill("");
+    await this.sweap_mpc_premium.focus();
+    await this.sweap_mpc_premium.pressSequentially(this.randomValueMoney.toString());
+    await this.sweap_mpc_premium.press("Tab");
+  
+    console.log("Filling Healthcard...");
+    await this.healthcard.waitFor({ state: "visible", timeout: 10000 });
+    await this.healthcard.click();
+    await this.healthcard.fill("");
+    await this.healthcard.focus();
+    await this.healthcard.pressSequentially(this.randomValueMoney.toString());
+    await this.healthcard.press("Tab");
+  
+    console.log("Filling SSS...");
+    await this.sss.waitFor({ state: "visible", timeout: 10000 });
+    await this.sss.click();
+    await this.sss.fill("");
+    await this.sss.focus();
+    await this.sss.pressSequentially(this.randomValueMoney.toString());
+    await this.sss.press("Tab");
+  
+    console.log("Clicking Save...");
     await this.saveButton.click();
     await this.Page.waitForTimeout(2000);
-    await this.messageSuccess.waitFor({ state: "visible" });
+  
+    // Optional: wait for success message
+    // await this.messageSuccess.waitFor({ state: "visible", timeout: 10000 });
+  
+    console.log("Deduction input complete.");
   }
-
+  
   async clearDeductions() {
     await this.searchFieldFirstName.fill(this.searchFieldNameArr[1]);
     await this.searchButton.click();
+    await this.Page.waitForTimeout(2000);
     await this.deductionModalView.click();
 
     await this.phic.fill("");
@@ -239,36 +292,25 @@ export class PersonnelProfile {
     await this.healthcard.fill("");
     await this.sss.fill("");
     await this.Page.waitForTimeout(2000);
-    await this.messageSuccess.waitFor({ state: "visible" });
+    // await this.messageSuccess.waitFor({ state: "visible" });
   }
 
   async optionalDeductionsView() {
     await this.searchFieldFirstName.fill(this.searchFieldNameArr[1]);
     await this.searchButton.click();
+    await this.Page.waitForTimeout(2000);
     await this.deductionModalView.click();
     await this.optionalDeductionBttn.click();
   }
 
   async inputOptionalDeductions() {
-    console.log(">>> Starting inputOptionalDeductions");
-
     // Step 1: Search and open modal
-    await this.searchFieldFirstName.waitFor({ state: "visible" });
     await this.searchFieldFirstName.fill(this.searchFieldNameArr[1]);
     await this.searchButton.click();
-
-    await this.deductionModalView.waitFor({ state: "visible" });
+    await this.Page.waitForTimeout(2000);
     await this.deductionModalView.click();
-
-    // Step 2: Open optional deduction section
-    await this.optionalDeductionBttn.waitFor({ state: "visible" });
     await this.optionalDeductionBttn.click();
-
-    // Step 3: Select deduction type
-    await this.deductionTypeOption.waitFor({ state: "visible" });
     await this.deductionTypeOption.click();
-
-    await this.deductionTypeOptionValue.waitFor({ state: "visible" });
     await this.deductionTypeOptionValue.click();
 
     // Step 4: Enter total amount
@@ -289,29 +331,53 @@ export class PersonnelProfile {
 
     // Step 1: Open the first date picker and select the start date
     //start
-    // await this.Page.locator("xpath=//*[@id='pv_id_22']/button").getByRole("button", { name: "Choose Date" }).click();
-    // await this.Page.getByRole("gridcell", { name: "16" }).click();
+    await this.Page.locator("xpath=//*[@id='pv_id_22']/button")
+      .getByRole("button", { name: "Choose Date" })
+      .click();
+    await this.Page.getByRole("gridcell", { name: "16" }).click();
     //end
-   // await this.Page.locator("xpath=//*[@id='pv_id_23']/button").click();
-    // await this.Page.getByRole('gridcell', { name: '23' }).click();
-    
-    await this.Page.evaluate(() => {
-      const inputs = document.querySelectorAll('.p-datepicker-input');
-      const targetInput = Array.from(inputs).find(i => i.getAttribute('aria-expanded') === 'true') as HTMLInputElement;
-    
-      if (targetInput) {
-        targetInput.value = '2025-04-14'; // Use the format accepted by your datepicker
-        targetInput.dispatchEvent(new Event('input', { bubbles: true }));
-        targetInput.dispatchEvent(new Event('change', { bubbles: true }));
-      }
-    });
+    await this.Page.locator("xpath=//*[@id='pv_id_23']/button").click();
+    await this.Page.getByRole("gridcell", { name: "23" }).click();
 
-    
     // Step 8: Save
     await this.buttonSaveOptionalDeduction.waitFor({ state: "visible" });
     await this.buttonSaveOptionalDeduction.click();
+  }
 
-    console.log(">>> inputOptionalDeductions completed");
+  async skipOptionalDeductionsRequiredFields() {
+    await this.searchFieldFirstName.fill(this.searchFieldNameArr[1]);
+    await this.searchButton.click();
+    await this.Page.waitForTimeout(2000);
+    await this.deductionModalView.click();
+    await this.optionalDeductionBttn.click();
+    await this.deductionTypeOption.click();
+    await this.deductionTypeOptionValue.click();
+
+    await this.buttonSaveOptionalDeduction.waitFor({ state: "visible" });
+    await this.buttonSaveOptionalDeduction.click();
+    await this.errMsgOptionalDeduction.waitFor({ state: "visible" });
+    await expect(this.errMsgOptionalDeduction).toHaveText(
+      "All fields are required"
+    );
+  }
+
+  async updateOptionalDeductions() {
+    await this.searchFieldFirstName.fill(this.searchFieldNameArr[1]);
+    await this.searchButton.click();
+    await this.Page.waitForTimeout(2000);
+    await this.deductionModalView.click();
+
+    // await this.Page.waitForSelector(
+    //   'xpath=//*[@id="pv_id_52_content"]/div/div/div[1]/table/tbody/tr/td',
+    //   { state: "visible" }
+    // );
+    await this.Page.waitForTimeout(2000);
+
+    await this.Page.getByRole("group", { name: "Optional Deductions" })
+      .locator('div:has-text("MABF Loan")')
+      .locator(
+        '//*[@id="pv_id_52_content"]/div/div/div[1]/table/tbody/tr/td[7]/button[1]'
+      )
+      .click();
   }
 }
-//*[@id="pv_id_22"]/button
