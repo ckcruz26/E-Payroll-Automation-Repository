@@ -267,14 +267,14 @@ export class PersonnelProfile {
     await this.sss.fill("");
     await this.sss.focus();
     await this.sss.pressSequentially(this.randomValueMoney.toString());
-    await this.sss.press("Tab");
+    await this.sss.press("Tab");  
   
     console.log("Clicking Save...");
     await this.saveButton.click();
     await this.Page.waitForTimeout(2000);
   
     // Optional: wait for success message
-    // await this.messageSuccess.waitFor({ state: "visible", timeout: 10000 });
+    await this.messageSuccess.waitFor({ state: "visible", timeout: 10000 });
   
     console.log("Deduction input complete.");
   }

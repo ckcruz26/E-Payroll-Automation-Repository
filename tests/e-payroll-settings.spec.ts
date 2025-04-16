@@ -1,5 +1,5 @@
 import { test, expect } from "@playwright/test";
-import { faker } from "@faker-js/faker";
+import { base, faker } from "@faker-js/faker";
 import path from "path";
 
 test.describe.configure({ mode: "serial" });
@@ -24,6 +24,8 @@ test.describe("Settings Suite", () => {
   const salaryTableName = `Salary Table - ${employmentType} Dummy ${randomNumber} Test`;
 
   const regexSalaryTable = /Salary Table - (MOA|Permanent) Dummy \d+ Test/;
+  const regexSalaryTableMOA = /Salary Table - MOA Dummy \d+ Test/;
+
   const regexDeductionName = /Deduction Type - \d+ Dummy Test/;
 
   const minMoney = 10000;
@@ -177,7 +179,8 @@ test.describe("Settings Suite", () => {
     );
 
     const salaryGradeEdit = page
-      .getByRole("row", { name: regexSalaryTable })
+      .getByRole("row", { name: regexSalaryTableMOA
+       })
       .getByLabel("Edit");
 
     const rowsCount = await tableCells.count();
@@ -188,7 +191,7 @@ test.describe("Settings Suite", () => {
       const rowLocator = tableCells.nth(i);
       const cellText = await rowLocator.innerText();
 
-      if (regexSalaryTable.test(cellText)) {
+      if (regexSalaryTableMOA.test(cellText)) {
         await salaryGradeEdit.click();
         tableEditFlag = 1;
         break;
@@ -196,16 +199,14 @@ test.describe("Settings Suite", () => {
     }
 
     if (tableEditFlag == 1) {
-      // const clickEditSpecificGradePlantilla = page.locator( `//*[@id="app"]/div/div[3]/div[1]/div[2]/div/div[1]/table/tbody/tr[${randomNumber}]/td[10]/button`);
-
+      
       const clickEditSpecificGradeMOA = page.locator(
         `//*[@id="app"]/div/div[3]/div[1]/div[2]/div/div[1]/table/tbody/tr[${randomNumber}]/td[6]/button`
       );
 
       const baseRateMOAField = page.locator('//*[@id="step1"]/input');
-      const premiumPercentageField = page.getByRole("textbox", {
-        name: "Premium Percentage*",
-      });
+      const premiumPercentageField = page.locator('//*[@id="premium"]/input'
+      );
 
       const saveButtonSalaryGrade = page.locator(
         "xpath=/html/body/div[2]/div/div[2]/div[4]/button[2]"
@@ -219,17 +220,28 @@ test.describe("Settings Suite", () => {
 
       await clickEditSpecificGradeMOA.click();
       await baseRateMOAField.clear();
-      await baseRateMOAField.fill(stringValueMoney);
-      await page.waitForTimeout(1000);
-      await premiumPercentageField.fill(String(randomValuePercent));
+
+      await baseRateMOAField.click();
+      await baseRateMOAField.fill("");
+      await baseRateMOAField.focus();
+      await baseRateMOAField.pressSequentially(stringValueMoney);
+      await baseRateMOAField.press('Tab')
+
+      await premiumPercentageField.click();
+      await premiumPercentageField.fill("");
+      await premiumPercentageField.focus();
+      await premiumPercentageField.pressSequentially(String(randomValuePercent));
+      await baseRateMOAField.press('Tab')
+
       await saveButtonSalaryGrade.click();
       await verifySaveChangeText.isVisible();
       await modalSuccess.isVisible();
       await page.waitForTimeout(1000);
+
     }
   });
 
-  test.skip("E-PAYROLL_SETTINGS_008", async ({ page }) => {
+  test("E-PAYROLL_SETTINGS_008", async ({ page }) => {
     await goToLink(page, "salary-grade");
 
     await page.waitForSelector(
@@ -243,7 +255,7 @@ test.describe("Settings Suite", () => {
     );
 
     const salaryGradeEdit = page
-      .getByRole("row", { name: regexSalaryTable })
+      .getByRole("row", { name: regexSalaryTableMOA })
       .getByLabel("Edit");
 
     const rowsCount = await tableCells.count();
@@ -254,7 +266,7 @@ test.describe("Settings Suite", () => {
       const rowLocator = tableCells.nth(i);
       const cellText = await rowLocator.innerText();
 
-      if (regexSalaryTable.test(cellText)) {
+      if (regexSalaryTableMOA.test(cellText)) {
         await salaryGradeEdit.click();
         tableEditFlag = 1;
         break;
@@ -262,7 +274,7 @@ test.describe("Settings Suite", () => {
     }
 
     if (tableEditFlag == 1) {
-      // const clickEditSpecificGradePlantilla = page.locator( `//*[@id="app"]/div/div[3]/div[1]/div[2]/div/div[1]/table/tbody/tr[${randomNumber}]/td[10]/button`);
+      
 
       const clickEditSpecificGradeMOA = page.locator(
         `//*[@id="app"]/div/div[3]/div[1]/div[2]/div/div[1]/table/tbody/tr[${randomNumber}]/td[6]/button`
@@ -276,14 +288,17 @@ test.describe("Settings Suite", () => {
       const verifySaveChangeText = page.getByText(
         "Are you sure you want to proceed?"
       );
-      const modalSuccess = page.getByText("Salary Grade updated");
+      const modalErrMsg = page.locator('div').filter({ hasText: /^Please fill-up all required fields$/ }).nth(1)
 
       await clickEditSpecificGradeMOA.click();
-      await baseRateMOAField.fill(String(randomValueMoney));
+      await baseRateMOAField.click();
+      await baseRateMOAField.focus();
+      await baseRateMOAField.pressSequentially('');
+      await baseRateMOAField.press('Tab')
       await page.waitForTimeout(1000);
       await saveButtonSalaryGrade.click();
       await verifySaveChangeText.isVisible();
-      await modalSuccess.isVisible();
+      await modalErrMsg.isVisible();
       await page.waitForTimeout(1000);
     }
   });
@@ -317,26 +332,19 @@ test.describe("Settings Suite", () => {
     const dialogAddDeductionNameField = page
       .getByRole("dialog", { name: "Add Deduction" })
       .getByRole("textbox");
-    const dialogStatusDeductionStatusDropdownBox = page.getByRole("combobox", {
-      name: "Active",
-    });
-    const dialogStatusDeductionStatusValue = page.getByRole("option", {
-      name: "Active",
-    });
-    const saveButtonDeduction = page.getByRole("button", { name: "Save" });
-    const alertDialogSaveButton = page
-      .getByRole("alertdialog", { name: "Confirmation" })
-      .getByLabel("Save");
     const deductionSuccessMessage = page.getByText(
       "Information has been saved"
     );
 
     await createDeductionButton.click();
     await dialogAddDeductionNameField.fill(deductionName);
-    await dialogStatusDeductionStatusDropdownBox.click();
-    await dialogStatusDeductionStatusValue.click();
-    await saveButtonDeduction.click();
-    await alertDialogSaveButton.click();
+    await page.getByRole("combobox", { name: "Active" }).click();
+    await page.getByRole("option", { name: "Inactive" }).click();
+    await page.getByRole("button", { name: "Save" }).click();
+    await page
+      .getByRole("alertdialog", { name: "Confirmation" })
+      .getByLabel("Save")
+      .click();
     await deductionSuccessMessage.click();
   });
 
@@ -410,8 +418,7 @@ test.describe("Settings Suite", () => {
 
     if (tableEditFlag == 1) {
       const deductionEditNameField = page
-        .getByRole("dialog", { name: "Add Deduction" })
-        .getByRole("textbox");
+        .getByRole('dialog', { name: 'Edit Deduction' }).getByRole('textbox')
       const dialogStatusDeductionStatusDropdownBox = page.getByRole(
         "combobox",
         { name: "Active" }
@@ -425,12 +432,20 @@ test.describe("Settings Suite", () => {
         .getByLabel("Save");
       const textUpdate = page.getByText("Information has been saved");
 
+      await deductionEditNameField.click();
       await deductionEditNameField.fill(deductionName);
       await dialogStatusDeductionStatusDropdownBox.click();
       await dialogStatusDeductionStatusValue.click();
       await editDialogSaveButton.click();
       await alertDialogSaveButton.click();
       await textUpdate.isVisible();
+
+
+      
+      // await page.getByRole('dialog', { name: 'Edit Deduction' }).getByRole('textbox').fill('deduction type faker');
+      // await page.getByRole('button', { name: 'Save' }).click();
+      // await page.getByRole('alertdialog', { name: 'Confirmation' }).getByLabel('Save').click();
+      
     }
   });
 
@@ -463,7 +478,7 @@ test.describe("Settings Suite", () => {
 
     if (tableEditFlag == 1) {
       const deductionEditNameField = page
-        .getByRole("dialog", { name: "Add Deduction" })
+        .getByRole("dialog", { name: "Edit Deduction" })
         .getByRole("textbox");
       const dialogStatusDeductionStatusDropdownBox = page.getByRole(
         "combobox",

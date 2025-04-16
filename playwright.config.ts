@@ -8,7 +8,7 @@ dotenv.config();
 export default defineConfig({
   globalTimeout: 3_600_000,
   testDir: "./tests",
-  fullyParallel: false,
+  fullyParallel: true,
   forbidOnly: !!process.env.CI,
   retries: process.env.CI ? 2 : 0,
   workers: process.env.CI ? 1 : undefined,
@@ -17,8 +17,8 @@ export default defineConfig({
   use: {
     launchOptions: {
       args: ["--start-maximized"],
-       slowMo: 2000,
-      headless: true,
+      //  slowMo: 2000,
+      headless: false,
     },
     trace: "on-first-retry", // Optional: Enables tracing for debugging
     ignoreHTTPSErrors: true,
