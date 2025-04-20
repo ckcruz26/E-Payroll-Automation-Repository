@@ -25,6 +25,7 @@ export class LoginPage {
     await this.empNoField.fill(empNo);
     await this.empPasswordField.fill(empPassword);
     await this.signInButton.click();
+    await this.Page.waitForURL(/.*\/dashboard.*/);  // Ensures page finishes redirecting
     await expect(this.Page).toHaveURL(/.*\/dashboard.*/);
   }
 

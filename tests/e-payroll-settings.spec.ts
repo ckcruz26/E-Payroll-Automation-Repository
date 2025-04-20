@@ -530,9 +530,10 @@ test.describe("Settings Suite", () => {
     }
 
     if (tableEditFlag == 1) {
-      const deductionEditNameField = page
-        .getByRole("dialog", { name: "Add Deduction" })
-        .getByRole("textbox");
+      // const deductionEditNameField = page
+      //   .getByRole("dialog", { name: "Add Deduction" })
+      //   .getByRole("textbox");
+      const deductionEditNameField = page.locator('xpath=/html/body/div[3]/div/div[2]/div[1]/div[1]/input')
       const dialogStatusDeductionStatusDropdownBox = page.getByRole(
         "combobox",
         { name: "Active" }
@@ -546,7 +547,7 @@ test.describe("Settings Suite", () => {
         .getByLabel("Save");
       const textUpdate = page.getByText("Information has been saved");
 
-      await deductionEditNameField.fill(deductionName);
+      // await deductionEditNameField.fill(deductionName);
       await dialogStatusDeductionStatusDropdownBox.click();
       await dialogStatusDeductionStatusValue.click();
       await editDialogSaveButton.click();
