@@ -31,60 +31,57 @@ test.describe("Personnel Profile Suite", () => {
   test("E-PAYROLL_PERSONNEL_PROFILE_003", async ({ page }) => {
     const personnelProfile = new PersonnelProfile(page);
     await personnelProfile.searchEmployeesByPayrollGroup();
-  })
+  });
 
-  test('E-PAYROLL_PERSONNEL_PROFILE_004', async ({ page }) => {
+  test("E-PAYROLL_PERSONNEL_PROFILE_004", async ({ page }) => {
     const personnelProfile = new PersonnelProfile(page);
     await personnelProfile.searchEmployeesByFundSource();
   });
 
-  test('E-PAYROLL_PERSONNEL_PROFILE_005', async ({ page }) => {
+  test("E-PAYROLL_PERSONNEL_PROFILE_005", async ({ page }) => {
     const personnelProfile = new PersonnelProfile(page);
     await personnelProfile.searchEmployeesByEmploymentStatus();
   });
 
-  test('E-PAYROLL_PERSONNEL_PROFILE_006', async ({ page }) => {
+  test("E-PAYROLL_PERSONNEL_PROFILE_006", async ({ page }) => {});
 
-  });
-
-  test('E-PAYROLL_PERSONNEL_PROFILE_007', async ({ page }) => {
+  test("E-PAYROLL_PERSONNEL_PROFILE_007", async ({ page }) => {
     const personnelProfile = new PersonnelProfile(page);
     await personnelProfile.downloadSummary();
   });
 
-  test('E-PAYROLL_PERSONNEL_PROFILE_008', async ({ page }) => {
+  test("E-PAYROLL_PERSONNEL_PROFILE_008", async ({ page }) => {
     const personnelProfile = new PersonnelProfile(page);
     await personnelProfile.deductionModal();
-  }); 
+  });
 
-  test('E-PAYROLL_PERSONNEL_PROFILE_009', async ({ page }) => {
+  test("E-PAYROLL_PERSONNEL_PROFILE_009", async ({ page }) => {
     const personnelProfile = new PersonnelProfile(page);
     await personnelProfile.inputDeduction();
   });
 
-  test('E-PAYROLL_PERSONNEL_PROFILE_010', async ({ page }) => {
+  test("E-PAYROLL_PERSONNEL_PROFILE_010", async ({ page }) => {
     const personnelProfile = new PersonnelProfile(page);
     await personnelProfile.clearDeductions();
   });
 
-  test('E-PAYROLL_PERSONNEL_PROFILE_011', async ({ page }) => { 
+  test("E-PAYROLL_PERSONNEL_PROFILE_011", async ({ page }) => {
     const personnelProfile = new PersonnelProfile(page);
     await personnelProfile.optionalDeductionsView();
   });
 
-  test.skip('E-PAYROLL_PERSONNEL_PROFILE_012', async ({ page }) => {
+  test.skip("E-PAYROLL_PERSONNEL_PROFILE_012", async ({ page }) => {
     const personnelProfile = new PersonnelProfile(page);
     await personnelProfile.inputOptionalDeductions();
   });
 
-  test('E-PAYROLL_PERSONNEL_PROFILE_013', async ({page}) => {
+  test("E-PAYROLL_PERSONNEL_PROFILE_013", async ({ page }) => {
     const personnelProfile = new PersonnelProfile(page);
     await personnelProfile.skipOptionalDeductionsRequiredFields();
   });
 
-  test.skip('E-PAYROLL_PERSONNEL_PROFILE_014', async ({page}) => {
+  test.skip("E-PAYROLL_PERSONNEL_PROFILE_014", async ({ page }) => {
     const personnelProfile = new PersonnelProfile(page);
     await personnelProfile.updateOptionalDeductions();
   });
-
 });
