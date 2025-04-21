@@ -212,15 +212,15 @@ export class PersonnelProfile {
 
   async inputDeduction() {
     this.Page.setDefaultTimeout(60000); // Optional: Increase global timeout
-  
+
     console.log("Filling first name and searching...");
     await this.searchFieldFirstName.fill(this.searchFieldNameArr[1]);
     await this.searchButton.click();
     await this.Page.waitForTimeout(2000);
-  
+
     console.log("Opening deduction modal...");
     await this.deductionModalView.click();
-  
+
     console.log("Filling PHIC...");
     await this.phic.waitFor({ state: "visible", timeout: 10000 });
     await this.phic.click();
@@ -228,7 +228,7 @@ export class PersonnelProfile {
     await this.phic.focus();
     await this.phic.pressSequentially(this.randomValueMoney.toString());
     await this.phic.press("Tab");
-  
+
     console.log("Filling PAG-IBIG...");
     await this.pagibig.waitFor({ state: "visible", timeout: 10000 });
     await this.pagibig.click();
@@ -236,7 +236,7 @@ export class PersonnelProfile {
     await this.pagibig.focus();
     await this.pagibig.pressSequentially(this.randomValueMoney.toString());
     await this.pagibig.press("Tab");
-  
+
     console.log("Filling HDMF MP2...");
     await this.hdmf_mp2.waitFor({ state: "visible", timeout: 10000 });
     await this.hdmf_mp2.click();
@@ -244,15 +244,17 @@ export class PersonnelProfile {
     await this.hdmf_mp2.focus();
     await this.hdmf_mp2.pressSequentially(this.randomValueMoney.toString());
     await this.hdmf_mp2.press("Tab");
-  
+
     console.log("Filling SWEAP MPC Premium...");
     await this.sweap_mpc_premium.waitFor({ state: "visible", timeout: 10000 });
     await this.sweap_mpc_premium.click();
     await this.sweap_mpc_premium.fill("");
     await this.sweap_mpc_premium.focus();
-    await this.sweap_mpc_premium.pressSequentially(this.randomValueMoney.toString());
+    await this.sweap_mpc_premium.pressSequentially(
+      this.randomValueMoney.toString()
+    );
     await this.sweap_mpc_premium.press("Tab");
-  
+
     console.log("Filling Healthcard...");
     await this.healthcard.waitFor({ state: "visible", timeout: 10000 });
     await this.healthcard.click();
@@ -260,25 +262,25 @@ export class PersonnelProfile {
     await this.healthcard.focus();
     await this.healthcard.pressSequentially(this.randomValueMoney.toString());
     await this.healthcard.press("Tab");
-  
+
     console.log("Filling SSS...");
     await this.sss.waitFor({ state: "visible", timeout: 10000 });
     await this.sss.click();
     await this.sss.fill("");
     await this.sss.focus();
     await this.sss.pressSequentially(this.randomValueMoney.toString());
-    await this.sss.press("Tab");  
-  
+    await this.sss.press("Tab");
+
     console.log("Clicking Save...");
     await this.saveButton.click();
     await this.Page.waitForTimeout(2000);
-  
+
     // Optional: wait for success message
     await this.messageSuccess.waitFor({ state: "visible", timeout: 10000 });
-  
+
     console.log("Deduction input complete.");
   }
-  
+
   async clearDeductions() {
     await this.searchFieldFirstName.fill(this.searchFieldNameArr[1]);
     await this.searchButton.click();

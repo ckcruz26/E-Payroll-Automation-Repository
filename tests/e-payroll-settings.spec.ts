@@ -179,8 +179,7 @@ test.describe("Settings Suite", () => {
     );
 
     const salaryGradeEdit = page
-      .getByRole("row", { name: regexSalaryTableMOA
-       })
+      .getByRole("row", { name: regexSalaryTableMOA })
       .getByLabel("Edit");
 
     const rowsCount = await tableCells.count();
@@ -199,14 +198,12 @@ test.describe("Settings Suite", () => {
     }
 
     if (tableEditFlag == 1) {
-      
       const clickEditSpecificGradeMOA = page.locator(
         `//*[@id="app"]/div/div[3]/div[1]/div[2]/div/div[1]/table/tbody/tr[${randomNumber}]/td[6]/button`
       );
 
       const baseRateMOAField = page.locator('//*[@id="step1"]/input');
-      const premiumPercentageField = page.locator('//*[@id="premium"]/input'
-      );
+      const premiumPercentageField = page.locator('//*[@id="premium"]/input');
 
       const saveButtonSalaryGrade = page.locator(
         "xpath=/html/body/div[2]/div/div[2]/div[4]/button[2]"
@@ -225,19 +222,20 @@ test.describe("Settings Suite", () => {
       await baseRateMOAField.fill("");
       await baseRateMOAField.focus();
       await baseRateMOAField.pressSequentially(stringValueMoney);
-      await baseRateMOAField.press('Tab')
+      await baseRateMOAField.press("Tab");
 
       await premiumPercentageField.click();
       await premiumPercentageField.fill("");
       await premiumPercentageField.focus();
-      await premiumPercentageField.pressSequentially(String(randomValuePercent));
-      await baseRateMOAField.press('Tab')
+      await premiumPercentageField.pressSequentially(
+        String(randomValuePercent)
+      );
+      await baseRateMOAField.press("Tab");
 
       await saveButtonSalaryGrade.click();
       await verifySaveChangeText.isVisible();
       await modalSuccess.isVisible();
       await page.waitForTimeout(1000);
-
     }
   });
 
@@ -274,8 +272,6 @@ test.describe("Settings Suite", () => {
     }
 
     if (tableEditFlag == 1) {
-      
-
       const clickEditSpecificGradeMOA = page.locator(
         `//*[@id="app"]/div/div[3]/div[1]/div[2]/div/div[1]/table/tbody/tr[${randomNumber}]/td[6]/button`
       );
@@ -288,13 +284,16 @@ test.describe("Settings Suite", () => {
       const verifySaveChangeText = page.getByText(
         "Are you sure you want to proceed?"
       );
-      const modalErrMsg = page.locator('div').filter({ hasText: /^Please fill-up all required fields$/ }).nth(1)
+      const modalErrMsg = page
+        .locator("div")
+        .filter({ hasText: /^Please fill-up all required fields$/ })
+        .nth(1);
 
       await clickEditSpecificGradeMOA.click();
       await baseRateMOAField.click();
       await baseRateMOAField.focus();
-      await baseRateMOAField.pressSequentially('');
-      await baseRateMOAField.press('Tab')
+      await baseRateMOAField.pressSequentially("");
+      await baseRateMOAField.press("Tab");
       await page.waitForTimeout(1000);
       await saveButtonSalaryGrade.click();
       await verifySaveChangeText.isVisible();
@@ -418,7 +417,8 @@ test.describe("Settings Suite", () => {
 
     if (tableEditFlag == 1) {
       const deductionEditNameField = page
-        .getByRole('dialog', { name: 'Edit Deduction' }).getByRole('textbox')
+        .getByRole("dialog", { name: "Edit Deduction" })
+        .getByRole("textbox");
       const dialogStatusDeductionStatusDropdownBox = page.getByRole(
         "combobox",
         { name: "Active" }
@@ -440,12 +440,9 @@ test.describe("Settings Suite", () => {
       await alertDialogSaveButton.click();
       await textUpdate.isVisible();
 
-
-      
       // await page.getByRole('dialog', { name: 'Edit Deduction' }).getByRole('textbox').fill('deduction type faker');
       // await page.getByRole('button', { name: 'Save' }).click();
       // await page.getByRole('alertdialog', { name: 'Confirmation' }).getByLabel('Save').click();
-      
     }
   });
 
@@ -533,7 +530,9 @@ test.describe("Settings Suite", () => {
       // const deductionEditNameField = page
       //   .getByRole("dialog", { name: "Add Deduction" })
       //   .getByRole("textbox");
-      const deductionEditNameField = page.locator('xpath=/html/body/div[3]/div/div[2]/div[1]/div[1]/input')
+      const deductionEditNameField = page.locator(
+        "xpath=/html/body/div[3]/div/div[2]/div[1]/div[1]/input"
+      );
       const dialogStatusDeductionStatusDropdownBox = page.getByRole(
         "combobox",
         { name: "Active" }

@@ -60,11 +60,130 @@ export class ReportsPage {
     await this.Page.waitForTimeout(2000);
   }
   //RESTRUCTURE TO POM: [CCRUZ] - ADD (04-08-2025) on hold script, due to the capturing of dropdown boxes
-  async selectionOfPagIbig() {}
+  async selectionOfPagIbig() {
+    await expect(this.Page).toHaveURL(/.*\/reports.*/);
+    const cellsLocator = this.Page.locator(
+      '//*[@id="app"]/div/div[3]/div[1]/div[2]/div/div[1]/table/tbody/tr/td'
+    );
 
-  async selectionOfSSS() {}
+    const rowsCount = await cellsLocator.count();
+    const yearDropdown = this.Page.locator("#pv_id_3 div");
+    const yearOptionVal = this.Page.getByRole("option", { name: "2025" });
+    const monthDropdown = this.Page.locator("#pv_id_4 div");
+    const monthOptionVal = this.Page.getByRole("option", { name: "January" });
+    const employmentStatus = this.Page.locator("#pv_id_5 div");
+    const employmentStatusVal = this.Page.getByRole("option", {
+      name: "Contract of Service / Job",
+    });
+    const generateButton = this.Page.getByRole("button", { name: "Generate" });
 
-  async selectionOfPhilhealth() {}
+    for (let i = 0; i < rowsCount; i++) {
+      const rowLocator = cellsLocator.nth(i);
+      const cellText = await rowLocator.innerText();
+
+      if (cellText.includes("Pag-ibig")) {
+        const pagIbigClick = this.Page.locator(
+          '//*[@id="app"]/div/div[3]/div[1]/div[2]/div/div[1]/table/tbody/tr[2]/td/a'
+        );
+        await pagIbigClick.click();
+        await yearDropdown.click();
+        await yearOptionVal.click();
+        await monthDropdown.click();
+        await monthOptionVal.click();
+        await employmentStatus.click();
+        await employmentStatusVal.click();
+        await generateButton.click();
+        break;
+      }
+    }
+
+    await this.Page.waitForTimeout(2000);
+  }
+
+  async selectionOfPhilhealth() {
+    await expect(this.Page).toHaveURL(/.*\/reports.*/);
+    const cellsLocator = this.Page.locator(
+      '//*[@id="app"]/div/div[3]/div[1]/div[2]/div/div[1]/table/tbody/tr/td'
+    );
+
+    const rowsCount = await cellsLocator.count();
+    const yearDropdown = this.Page.getByRole("combobox", {
+      name: "Please select Year",
+    });
+    const yearOptionVal = this.Page.getByRole("option", { name: "2025" });
+    const monthDropdown = this.Page.locator("#pv_id_2").getByRole("combobox", {
+      name: "Please select",
+    });
+    const monthOptionVal = this.Page.getByRole("option", { name: "January" });
+    const employmentStatus = this.Page.locator("#pv_id_3 div");
+    const employmentStatusVal = this.Page.getByRole("option", {
+      name: "Contract of Service / Job",
+    });
+    const generateButton = this.Page.getByRole("button", { name: "Generate" });
+
+    for (let i = 0; i < rowsCount; i++) {
+      const rowLocator = cellsLocator.nth(i);
+      const cellText = await rowLocator.innerText();
+
+      if (cellText.includes("Philhealth")) {
+        const pagIbigClick = this.Page.locator(
+          '//*[@id="app"]/div/div[3]/div[1]/div[2]/div/div[1]/table/tbody/tr[3]/td/a'
+        );
+        await pagIbigClick.click();
+        await yearDropdown.click();
+        await yearOptionVal.click();
+        await monthDropdown.isVisible();
+        await monthDropdown.click();
+        await monthOptionVal.click();
+        await employmentStatus.click();
+        await employmentStatusVal.click();
+        await generateButton.click();
+
+        break;
+      }
+    }
+
+    await this.Page.waitForTimeout(2000);
+  }
+
+  async selectionOfSSS() {
+    await expect(this.Page).toHaveURL(/.*\/reports.*/);
+    const cellsLocator = this.Page.locator(
+      '//*[@id="app"]/div/div[3]/div[1]/div[2]/div/div[1]/table/tbody/tr/td'
+    );
+
+    const rowsCount = await cellsLocator.count();
+
+    const yearDropdown = this.Page.getByRole("combobox", {
+      name: "Please select Year",
+    });
+    const yearOptionVal = this.Page.getByRole("option", { name: "2025" });
+    const monthDropdown = this.Page.getByRole("combobox", {
+      name: "Please select Month",
+    });
+    const monthOptionVal = this.Page.getByRole("option", { name: "January" });
+    const generateButton = this.Page.getByRole("button", { name: "Generate" });
+
+    for (let i = 0; i < rowsCount; i++) {
+      const rowLocator = cellsLocator.nth(i);
+      const cellText = await rowLocator.innerText();
+
+      if (cellText.includes("SSS")) {
+        const sssClick = this.Page.locator(
+          '//*[@id="app"]/div/div[3]/div[1]/div[2]/div/div[1]/table/tbody/tr[4]/td/a'
+        );
+        await sssClick.click();
+        await yearDropdown.click();
+        await yearOptionVal.click();
+        await monthDropdown.click();
+        await monthOptionVal.click();
+        await generateButton.click();
+        break;
+      }
+    }
+
+    await this.Page.waitForTimeout(2000);
+  }
   //RESTRUCTURE TO POM: [CCRUZ] - END (04-08-2025) on hold script, due to the capturing of dropdown boxes
   async requiredFields() {
     await expect(this.Page).toHaveURL(/.*\/reports.*/);

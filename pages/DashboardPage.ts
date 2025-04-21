@@ -14,7 +14,7 @@ export class DashboardPage {
   async verifyDashboardPage() {
     await expect(this.Page).toHaveURL(/.*\/dashboard.*/);
   }
-    
+
   async clickViewAll() {
     await this.viewAll.click();
   }
