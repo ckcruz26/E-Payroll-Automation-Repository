@@ -80,4 +80,14 @@ test.describe("Payroll Manager Suite", () => {
     await payrollManager.viewUnderstatedSalaryModal();
   })
 
+  test("E-PAYROLL_PAYROLL_MANAGEMENT_014", async ({ page }) => {
+    const payrollManager = new PayrollManagerPage(page);
+    await payrollManager.fillUpUnderstatedSalaryModal();
+  });
+
+  test("E-PAYROLL_PAYROLL_MANAGEMENT_015", async ({ page }) => {
+    const payrollManager = new PayrollManagerPage(page);
+    await payrollManager.skipUnderstatedSalaryRequiredFields();
+  });
+
 });

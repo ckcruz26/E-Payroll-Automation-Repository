@@ -1,0 +1,61 @@
+  async createPayroll() {
+    await this.payrollCreateButton.waitFor({
+      state: "visible",
+      timeout: 10000,
+    });
+    await this.payrollCreateButton.click();
+
+  //   await this.payrollGroup.waitFor({ state: "visible", timeout: 10000 });
+  //   await this.payrollGroup.click();
+  //   await this.payrollGroupVal.waitFor({ state: "visible", timeout: 10000 });
+  //   await this.payrollGroupVal.click();
+
+  //   //await this.fundSource.waitFor({ state: "visible", timeout: 10000 });
+  //   await this.fundSource.click();
+  // //  await this.fundSourceVal.waitFor({ state: "visible", timeout: 10000 });
+  //   await this.fundSourceVal.click();
+
+  //   await this.employmentType.waitFor({ state: "visible", timeout: 10000 });
+  //   await this.employmentType.click();
+  //   await this.employmentTypeVal.waitFor({ state: "visible", timeout: 10000 });
+  //   await this.employmentTypeVal.click();
+
+  //   //await this.yearStart.waitFor({ state: "visible", timeout: 10000 });
+  //   await this.yearStart.click();
+  //  // await this.yearStartVal.waitFor({ state: "visible", timeout: 10000 });
+  //   await this.yearStartVal.click();
+
+  //   await this.claimType.waitFor({ state: "visible", timeout: 10000 });
+  //   await this.claimType.click();
+  //   await this.claimTypeVal.waitFor({ state: "visible", timeout: 10000 });
+  //   await this.claimTypeVal.click();
+
+  //   await this.month.waitFor({ state: "visible", timeout: 10000 });
+  //   await this.month.click();
+  //   await this.monthVal.waitFor({ state: "visible", timeout: 10000 });
+  //   await this.monthVal.click();
+
+  //   await this.batch.waitFor({ state: "visible", timeout: 10000 });
+  //   await this.batch.click();
+  //   await this.batchVal.waitFor({ state: "visible", timeout: 10000 });
+  //   await this.batchVal.click();
+
+  //   // await this.cutOff.waitFor({ state: "visible", timeout: 10000 });
+  //   await this.cutOff.click();
+  //   await this.cutOffVal.waitFor({ state: "visible", timeout: 10000 });
+  //   await this.cutOffVal.click();
+
+  //   await this.createPayrollBtn.waitFor({ state: "visible", timeout: 10000 });
+  //   await this.createPayrollBtn.click();
+
+  //   await this.bulkCheckOfEmployee.waitFor({
+  //     state: "visible",
+  //     timeout: 10000,
+  //   });
+  //   await this.bulkCheckOfEmployee.click();
+
+  //   await this.createPayrollModal.waitFor({ state: "visible", timeout: 10000 });
+  //   await this.createPayrollModal.click();
+
+
+  }

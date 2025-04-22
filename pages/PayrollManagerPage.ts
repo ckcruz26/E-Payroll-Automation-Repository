@@ -16,8 +16,8 @@ export class PayrollManagerPage {
   readonly yearStart: Locator;
   readonly yearStartVal: Locator;
 
-  readonly yearEnd: Locator;
-  readonly yearEndVal: Locator;
+  readonly claimType: Locator;
+  readonly claimTypeVal: Locator;
 
   readonly month: Locator;
   readonly monthVal: Locator;
@@ -93,8 +93,8 @@ export class PayrollManagerPage {
     this.yearStart = page.locator("#pv_id_9 #year");
     this.yearStartVal = page.getByRole("option", { name: "2025" });
 
-    this.yearEnd = page.locator("#pv_id_10 #year");
-    this.yearEndVal = page.getByRole("option", { name: "Salary" });
+    this.claimType = page.locator("#pv_id_10 #year");
+    this.claimTypeVal = page.getByRole("option", { name: "Salary" });
 
     this.month = page.locator("#month");
     this.monthVal = page.getByRole("option", { name: this.randomMonth });
@@ -102,7 +102,7 @@ export class PayrollManagerPage {
     this.batch = page.locator("#batch");
     this.batchVal = page.getByRole("option", { name: "00" });
 
-    this.cutOff = page.locator("#cutOff");
+    this.cutOff = page.locator("//*[@id=cutOff]");
     this.cutOffVal = page.getByRole("option", { name: "1-15" });
 
     this.createPayrollBtn = page.getByRole("button", {
@@ -110,9 +110,12 @@ export class PayrollManagerPage {
     });
 
     this.bulkCheckOfEmployee = page
-      .getByRole("row", { name: "All items unselected Name" })
-      .locator("div")
-      .first();
+      // .getByRole("row", { name: "All items unselected Name" })
+      .locator(
+        "xpath=/html/body/div[2]/div/div[2]/div[1]/div[1]/table/thead/tr/th[1]/div/div/input"
+      );
+    //.first();
+
     this.createPayrollModal = page.getByRole("button", {
       name: "Create Payroll",
     });
@@ -164,6 +167,18 @@ export class PayrollManagerPage {
     this.understatedSalaryMenuItem = page
       .getByRole("menuitem", { name: "Add Understated Salary" })
       .locator("a");
+
+    this.understatedSalaryField = page.locator(
+      "xpath=/html/body/div[2]/div/div[2]/div[1]/span/input"
+    );
+    this.understatedSalarySaveBttn = page.getByRole("button", { name: "Save" });
+    this.understatedSalarySuccessMsg = page.getByText(
+      "Understated Salary successfully updated."
+    );
+    this.understatedSalaryErrorMsg = page
+      .locator("div")
+      .filter({ hasText: /^No amount has been specified\.$/ })
+      .nth(1);
   }
 
   async verifyPayrollManagerPage() {
@@ -181,33 +196,57 @@ export class PayrollManagerPage {
   }
 
   async createPayroll() {
+    await this.payrollCreateButton.waitFor({
+      state: "visible",
+      timeout: 10000,
+    });
     await this.payrollCreateButton.click();
-    await this.payrollGroup.click();
-    await this.payrollGroupVal.click();
 
-    await this.fundSource.click();
-    await this.fundSourceVal.click();
+    await this.Page.locator("#prGroup").click();
+    await this.Page.getByRole("searchbox").fill("POLI");
+    await this.Page.getByRole("option", {
+      name: "POLICY AND PLANS DIVISION",
+    }).click();
+    
+    await this.Page.locator("#FundSource").click();
+    // await this.Page.getByRole("searchbox").click();
+    // await this.Page.getByRole("searchbox").fill("ICTMS");
+    await this.Page.getByRole("option", { name: "ICTMS" }).click();
+    await this.Page.locator("#EmploymentType").click();
+    // await this.Page.getByRole("searchbox").click();
+    await this.Page.getByRole("searchbox").fill("CON");
+    await this.Page.getByRole("option", {
+      name: "CONTRACT OF SERVICE",
+    }).click();
+    await this.Page.locator("#cutOff").click();
+    await this.Page.getByRole("option", { name: "1-15" }).click();
+    await this.Page.locator("#pv_id_9 #year").click();
+    await this.Page.getByRole("searchbox").fill("2025");
+    await this.Page.getByRole("option", { name: "2025" }).click();
 
-    await this.employmentType.click();
-    await this.employmentTypeVal.click();
+    await this.Page.locator("#pv_id_10 #year").click();
+    // await this.Page.getByRole("searchbox").click();
+    // await this.Page.getByRole("searchbox").press("CapsLock");
+    // await this.Page.getByRole("searchbox").fill("SALAR");
+    await this.Page.getByRole("option", { name: "Salary" }).click();
 
-    await this.yearStart.click();
-    await this.yearStartVal.click();
-
-    await this.yearEnd.click();
-    await this.yearEndVal.click();
-
+    await this.month.waitFor({ state: "visible", timeout: 10000 });
     await this.month.click();
     await this.monthVal.click();
+    await this.Page.locator("#batch").click();
+    await this.Page.getByRole("option", { name: "00" }).click();
 
-    await this.batch.click();
-    await this.batchVal.click();
 
-    await this.cutOff.click();
-    await this.cutOffVal.click();
-
+    await this.createPayrollBtn.waitFor({ state: "visible", timeout: 10000 });
     await this.createPayrollBtn.click();
+
+    await this.bulkCheckOfEmployee.waitFor({
+      state: "visible",
+      timeout: 10000,
+    });
     await this.bulkCheckOfEmployee.click();
+
+    await this.createPayrollModal.waitFor({ state: "visible", timeout: 10000 });
     await this.createPayrollModal.click();
   }
 
@@ -225,8 +264,8 @@ export class PayrollManagerPage {
     await this.yearStart.click();
     await this.yearStartVal.click();
 
-    await this.yearEnd.click();
-    await this.yearEndVal.click();
+    await this.claimType.click();
+    await this.claimTypeVal.click();
 
     await this.createPayrollBtn.click();
   }
@@ -293,7 +332,6 @@ export class PayrollManagerPage {
     await this.overstatedSalaryField.focus();
     await this.overstatedSalarySaveBttn.click();
     await this.overstatedSalaryErrorMsg.isVisible();
-    
   }
 
   async viewUnderstatedSalaryModal() {
@@ -304,10 +342,39 @@ export class PayrollManagerPage {
       button: "right",
     });
     await this.understatedSalaryMenuItem.click();
-
   }
 
   async fillUpUnderstatedSalaryModal() {
+    await this.payrollSearchField.fill("PPD-ICTMS-COS-2025-SAL-01-00");
+    await this.viewButtonPayroll.click();
 
+    await this.understatedSalaryRightClick.click({
+      button: "right",
+    });
+    await this.understatedSalaryMenuItem.click();
+    await this.understatedSalaryField.click();
+    await this.understatedSalaryField.fill("");
+    await this.understatedSalaryField.focus();
+    await this.understatedSalaryField.pressSequentially(
+      this.randomValueMoney.toString()
+    );
+    await this.understatedSalaryField.press("Tab");
+    await this.understatedSalarySaveBttn.click();
+    await this.understatedSalarySuccessMsg.isVisible();
+  }
+
+  async skipUnderstatedSalaryRequiredFields() {
+    await this.payrollSearchField.fill("PPD-ICTMS-COS-2025-SAL-01-00");
+    await this.viewButtonPayroll.click();
+
+    await this.understatedSalaryRightClick.click({
+      button: "right",
+    });
+    await this.understatedSalaryMenuItem.click();
+    await this.understatedSalaryField.click();
+    await this.understatedSalaryField.fill("");
+    await this.understatedSalaryField.press("Tab");
+    await this.understatedSalarySaveBttn.click();
+    await this.understatedSalaryErrorMsg.isVisible();
   }
 }

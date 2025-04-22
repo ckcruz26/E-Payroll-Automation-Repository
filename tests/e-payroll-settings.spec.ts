@@ -692,9 +692,9 @@ test.describe("Settings Suite", () => {
 
   test("E-PAYROLL_SETTINGS_028", async ({ page }) => {
     await goToLink(page, "user-access");
-    await page.waitForSelector(
-      '//*[@id="app"]/div/div[3]/div[1]/div[2]/div/div[1]/table/tbody/tr/td'
-    );
+    // await page.waitForSelector(
+    //   '//*[@id="app"]/div/div[3]/div[1]/div[2]/div/div[1]/table/tbody/tr/td'
+    // );
     const editButton = page.locator(
       '//*[@id="app"]/div/div[3]/div[1]/div[2]/div/div[1]/table/tbody/tr[1]/td[6]/button'
     );

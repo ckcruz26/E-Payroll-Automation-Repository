@@ -13,7 +13,7 @@ export class LoginPage {
     this.Page = page;
     this.empNoField = page.locator("#basic");
     this.empPasswordField = page.getByPlaceholder("Password");
-    this.signInButton = page.locator('//*[@id="app"]/div/div/div/div/div[3]/a');
+    this.signInButton = page.getByRole('link', { name: 'Sign In' })
     this.modalError = page.locator(
       "xpath=/html/body/div[2]/div/div[2]/div[1]/p"
     );

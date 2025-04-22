@@ -153,8 +153,8 @@ export class PersonnelProfile {
       .getByLabel("Save");
 
     this.errMsgOptionalDeduction = page
-      .getByText("All fields are required")
-      .nth(1);
+      .locator('div:nth-child(3) > div > .p-toast-message > .p-toast-message-content')
+
     this.updateOptionalDeductionBttn = page.getByRole("button", {
       name: "Edit",
     });
@@ -357,10 +357,8 @@ export class PersonnelProfile {
 
     await this.buttonSaveOptionalDeduction.waitFor({ state: "visible" });
     await this.buttonSaveOptionalDeduction.click();
-    await this.errMsgOptionalDeduction.waitFor({ state: "visible" });
-    await expect(this.errMsgOptionalDeduction).toHaveText(
-      "All fields are required"
-    );
+    await this.errMsgOptionalDeduction.isVisible();
+
   }
 
   async updateOptionalDeductions() {

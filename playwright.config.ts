@@ -6,7 +6,6 @@ dotenv.config();
  * See https://playwright.dev/docs/test-configuration.
  */
 export default defineConfig({
-  globalTimeout: 3_600_000,
   testDir: "./tests",
   fullyParallel: true,
   forbidOnly: !!process.env.CI,
@@ -18,10 +17,14 @@ export default defineConfig({
     launchOptions: {
       args: ["--start-maximized"],
       //  slowMo: 2000,
-      headless: false,
+      headless: true,
+      
     },
-    trace: "on-first-retry", // Optional: Enables tracing for debugging
+    //trace: "on-first-retry", // Optional: Enables tracing for debugging
     ignoreHTTPSErrors: true,
+    // actionTimeout: 10_000 
+    trace: "off",
+    actionTimeout: 5000,
   },
 
   /* Configure projects for major browsers */
