@@ -3,15 +3,17 @@ import { test, expect } from "@playwright/test";
 import path from "path";
 import { ReportsPage } from "../pages/ReportsPage";
 
-test.describe.configure({ mode: "serial" });
+test.describe.configure({ mode: "parallel" });
 
 test.describe("Reports Suite", () => {
   test.use({
     storageState: path.resolve(__dirname, "../auth/auth.json"),
   });
 
+  const url = String(process.env.URL);
+
   test.beforeEach(async ({ page }) => {
-    await page.goto("http://172.31.32.64:70/reports");
+    await page.goto(`${url}reports`);
   });
 
   test.afterEach(async ({ page }) => {
@@ -38,7 +40,7 @@ test.describe("Reports Suite", () => {
     await reports.selectionOfPagIbig();
   });
 
-  test.skip("E-PAYROLL_REPORTS_005", async ({ page }) => {
+  test.only("E-PAYROLL_REPORTS_005", async ({ page }) => {
     const reports = new ReportsPage(page);
     await reports.selectionOfPhilhealth();
   });

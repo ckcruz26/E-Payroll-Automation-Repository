@@ -2,15 +2,17 @@ import { test, expect } from "@playwright/test";
 import { base, faker } from "@faker-js/faker";
 import path from "path";
 
-test.describe.configure({ mode: "serial" });
+test.describe.configure({ mode: "parallel" });
 
 test.describe("Settings Suite", () => {
   test.use({
     storageState: path.resolve(__dirname, "../auth/auth.json"),
   });
 
+  const url = String(process.env.URL);
+
   async function goToLink(page, variable) {
-    await page.goto(`http://172.31.32.64:70/settings/${variable}`);
+    await page.goto(`${url}settings/${variable}`);
   }
 
   test.afterEach(async ({ page }) => {
@@ -586,7 +588,7 @@ test.describe("Settings Suite", () => {
     const currentDir = __dirname;
     const parentDir = path.dirname(currentDir);
     const inputFileValue = path.resolve(
-      parentDir + "/test-data/deduction-template (1).csv"
+      parentDir + "/test-data/deduction-template (3).csv"
     );
     const successIndicator = page
       .locator("div")

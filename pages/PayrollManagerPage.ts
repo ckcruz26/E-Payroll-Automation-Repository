@@ -40,6 +40,7 @@ export class PayrollManagerPage {
   readonly deleteButtonPayroll: Locator;
   readonly deleteButtonInDialog: Locator;
   readonly errorTextDeletion: Locator;
+  readonly errorTextDeletionField: Locator;
 
   readonly randomMonth: string = faker.date.month();
 
@@ -130,7 +131,7 @@ export class PayrollManagerPage {
 
     this.deleteButtonPayrollLocator = page
       .locator("tr")
-      .filter({ hasText: "PPD-ICTMS-COS-2025-SAL-01-00" })
+      .filter({ hasText: "PPD-ICTMS-COS-2025-SAL-09-00" })
       .first();
     this.deleteButtonPayroll =
       this.deleteButtonPayrollLocator.getByLabel("Delete");
@@ -138,7 +139,11 @@ export class PayrollManagerPage {
     this.deleteButtonInDialog = page
       .getByRole("dialog", { name: "Delete Payroll" })
       .getByLabel("Delete");
+
     this.errorTextDeletion = page.getByText("Please enter reason for deletion");
+    this.errorTextDeletionField = page
+      .getByRole("dialog", { name: "Delete Payroll" })
+      .getByRole("textbox");
 
     this.overstatedSalaryRightClick = page
       .getByRole("cell", { name: /^\d+$/ })
@@ -188,6 +193,7 @@ export class PayrollManagerPage {
 
   async searchSpecificPayroll() {
     await this.payrollSearchField.fill("PPD");
+    await this.Page.waitForTimeout(2000);
   }
 
   async viewCreatePayrollModal() {
@@ -207,13 +213,10 @@ export class PayrollManagerPage {
     await this.Page.getByRole("option", {
       name: "POLICY AND PLANS DIVISION",
     }).click();
-    
+
     await this.Page.locator("#FundSource").click();
-    // await this.Page.getByRole("searchbox").click();
-    // await this.Page.getByRole("searchbox").fill("ICTMS");
     await this.Page.getByRole("option", { name: "ICTMS" }).click();
     await this.Page.locator("#EmploymentType").click();
-    // await this.Page.getByRole("searchbox").click();
     await this.Page.getByRole("searchbox").fill("CON");
     await this.Page.getByRole("option", {
       name: "CONTRACT OF SERVICE",
@@ -225,9 +228,6 @@ export class PayrollManagerPage {
     await this.Page.getByRole("option", { name: "2025" }).click();
 
     await this.Page.locator("#pv_id_10 #year").click();
-    // await this.Page.getByRole("searchbox").click();
-    // await this.Page.getByRole("searchbox").press("CapsLock");
-    // await this.Page.getByRole("searchbox").fill("SALAR");
     await this.Page.getByRole("option", { name: "Salary" }).click();
 
     await this.month.waitFor({ state: "visible", timeout: 10000 });
@@ -235,8 +235,6 @@ export class PayrollManagerPage {
     await this.monthVal.click();
     await this.Page.locator("#batch").click();
     await this.Page.getByRole("option", { name: "00" }).click();
-
-
     await this.createPayrollBtn.waitFor({ state: "visible", timeout: 10000 });
     await this.createPayrollBtn.click();
 
@@ -248,6 +246,7 @@ export class PayrollManagerPage {
 
     await this.createPayrollModal.waitFor({ state: "visible", timeout: 10000 });
     await this.createPayrollModal.click();
+    await this.Page.waitForTimeout(2000);
   }
 
   async skipCreatePayrollRequiredFields() {
@@ -268,24 +267,31 @@ export class PayrollManagerPage {
     await this.claimTypeVal.click();
 
     await this.createPayrollBtn.click();
+    await this.Page.waitForTimeout(2000);
   }
 
   async viewExisitingPayrollModal() {
     await this.payrollSearchField.fill("PPD-ICTMS-COS-2025-SAL-01-00");
     await this.viewButtonPayroll.click();
+    await this.Page.waitForTimeout(2000);
   }
 
   async downloadPayrollSummary() {
     await this.payrollSearchField.fill("PPD-ICTMS-COS-2025-SAL-01-00");
     await this.viewButtonPayroll.click();
     await this.generatePayrollButton.click();
+    await this.Page.waitForTimeout(2000);
   }
 
   async deleteExistingPayroll() {
-    await this.payrollSearchField.fill("PPD-ICTMS-COS-2025-SAL-01-00");
+    
+    await this.payrollSearchField.fill("PPD-ICTMS-COS-2025-SAL-09-00");
     await this.deleteButtonPayroll.click();
-    await this.deleteButtonInDialog.click();
     await this.errorTextDeletion.isVisible();
+    await this.errorTextDeletionField.fill("Testing Deletion");
+    await this.deleteButtonInDialog.click();
+    
+    await this.Page.waitForTimeout(2000);
   }
 
   async viewOverstatedSalaryModal() {
@@ -296,6 +302,7 @@ export class PayrollManagerPage {
       button: "right",
     });
     await this.overstatedSalaryMenuItem.click();
+    await this.Page.waitForTimeout(2000);
   }
 
   async fillUpOverstatedSalaryModal() {
@@ -316,6 +323,7 @@ export class PayrollManagerPage {
     await this.overstatedSalaryField.press("Tab");
     await this.overstatedSalarySaveBttn.click();
     await this.overstatedSalarySuccessMsg.isVisible();
+    await this.Page.waitForTimeout(2000);
   }
 
   async skipOverstatedSalaryRequiredFields() {
@@ -332,6 +340,7 @@ export class PayrollManagerPage {
     await this.overstatedSalaryField.focus();
     await this.overstatedSalarySaveBttn.click();
     await this.overstatedSalaryErrorMsg.isVisible();
+    await this.Page.waitForTimeout(2000);
   }
 
   async viewUnderstatedSalaryModal() {
@@ -361,6 +370,7 @@ export class PayrollManagerPage {
     await this.understatedSalaryField.press("Tab");
     await this.understatedSalarySaveBttn.click();
     await this.understatedSalarySuccessMsg.isVisible();
+    await this.Page.waitForTimeout(2000);
   }
 
   async skipUnderstatedSalaryRequiredFields() {
@@ -376,5 +386,6 @@ export class PayrollManagerPage {
     await this.understatedSalaryField.press("Tab");
     await this.understatedSalarySaveBttn.click();
     await this.understatedSalaryErrorMsg.isVisible();
+    await this.Page.waitForTimeout(2000);
   }
 }

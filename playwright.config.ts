@@ -12,19 +12,21 @@ export default defineConfig({
   retries: process.env.CI ? 2 : 0,
   workers: process.env.CI ? 1 : undefined,
   reporter: [["html", { outputFolder: "./playwright-report", open: "never" }]],
-  
+  // timeout: 60000,
   use: {
     launchOptions: {
       args: ["--start-maximized"],
       //  slowMo: 2000,
-      headless: true,
+      headless: false,
       
     },
     //trace: "on-first-retry", // Optional: Enables tracing for debugging
     ignoreHTTPSErrors: true,
     // actionTimeout: 10_000 
     trace: "off",
-    actionTimeout: 5000,
+    //actionTimeout: 5000,
+    video: "on",
+    screenshot: "on",
   },
 
   /* Configure projects for major browsers */
@@ -34,6 +36,7 @@ export default defineConfig({
       use: {
         viewport: null,
         deviceScaleFactor: undefined,
+        // storageState : "./auth/auth.json"
       },
     },
     // Uncomment if you want to test other browsers

@@ -1,7 +1,7 @@
 import { test, expect } from "@playwright/test";
 import { LoginPage } from "../pages/LoginPage";
 
-test.describe.configure({ mode: "serial" });
+test.describe.configure({ mode: "parallel" });
 
 test.describe("Login Suite", () => {
   const url = String(process.env.URL);

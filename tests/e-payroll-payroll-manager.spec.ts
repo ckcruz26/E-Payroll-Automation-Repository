@@ -10,8 +10,10 @@ test.describe("Payroll Manager Suite", () => {
     storageState: path.resolve(__dirname, "../auth/auth.json"),
   });
 
+  const url = String(process.env.URL);
+
   test.beforeEach(async ({ page }) => {
-    await page.goto("http://172.31.32.64:70/payroll-management");
+    await page.goto(`${url}payroll-management`);
   });
 
   test.afterEach(async ({ page }) => {
@@ -57,8 +59,6 @@ test.describe("Payroll Manager Suite", () => {
     const payrollManager = new PayrollManagerPage(page);
     await payrollManager.deleteExistingPayroll();
   });
-
-  test.skip("E-PAYROLL_PAYROLL_MANAGEMENT_009", async ({ page }) => {});
 
   test("E-PAYROLL_PAYROLL_MANAGEMENT_010", async ({ page }) => {
     const payrollManager = new PayrollManagerPage(page);

@@ -2,15 +2,17 @@ import { test, expect } from "@playwright/test";
 import path from "path";
 import { DashboardPage } from "../pages/DashboardPage";
 
-test.describe.configure({ mode: "serial" });
+test.describe.configure({ mode: "parallel" });
 
 test.describe("Dashboard Suite", () => {
   test.use({
     storageState: path.resolve(__dirname, "../auth/auth.json"),
   });
 
+  const url = String(process.env.URL);
+
   test.beforeEach(async ({ page }) => {
-    await page.goto(`http://172.31.32.64:70/dashboard`);
+    await page.goto(`${url}dashboard`);
   });
 
   test.afterEach(async ({ page }) => {

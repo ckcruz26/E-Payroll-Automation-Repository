@@ -59,3 +59,16 @@
 
 
   }
+
+
+
+    test.skip("E-PAYROLL_PERSONNEL_PROFILE_012", async ({ page }) => {
+    const personnelProfile = new PersonnelProfile(page);
+    await personnelProfile.inputOptionalDeductions();
+  });
+
+
+    test.skip("E-PAYROLL_PERSONNEL_PROFILE_014", async ({ page }) => {
+    const personnelProfile = new PersonnelProfile(page);
+    await personnelProfile.updateOptionalDeductions();
+  });

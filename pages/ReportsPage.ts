@@ -12,13 +12,8 @@ export class ReportsPage {
 
   constructor(page: Page) {
     this.Page = page;
-    this.clickReports = page.locator(
-      '//*[@id="app"]/div/div[2]/div/div[1]/ul/li[4]/ul/li/a'
-    );
+
     this.searchField = page.getByPlaceholder("Search");
-    this.cellsLocator = page.locator(
-      '//*[@id="app"]/div/div[3]/div[1]/div[2]/div/div[1]/table/tbody/tr/td'
-    );
 
     this.generateButton = page.getByLabel("Generate");
     this.modalMessageError = page.locator(
@@ -36,123 +31,97 @@ export class ReportsPage {
 
     for (const searchRemittance of this.remittanceArr) {
       await this.searchField.fill(searchRemittance);
+      await this.Page.waitForTimeout(2000);
     }
-
-    await this.Page.waitForTimeout(2000);
   }
 
   async selectionOfRemittance() {
     await expect(this.Page).toHaveURL(/.*\/reports.*/);
-    const rowsCount = await this.cellsLocator.count();
-    for (let i = 0; i < rowsCount; i++) {
-      const rowLocator = this.cellsLocator.nth(i);
-      const cellText = await rowLocator.innerText();
-
-      if (cellText.includes("Pag-ibig")) {
-        console.log(cellText);
-        const pagIbigClick = this.Page.locator(
-          '//*[@id="app"]/div/div[3]/div[1]/div[2]/div/div[1]/table/tbody/tr[2]/td/a'
-        );
-        await pagIbigClick.click();
-        break;
-      }
-    }
+    const pagIbigRemittanceMenu = this.Page.locator(
+      `xpath=//table//tr[td//a[contains(., 'Pag-ibig Remittance')]]//a`
+    );
+    await pagIbigRemittanceMenu.click();
     await this.Page.waitForTimeout(2000);
   }
   //RESTRUCTURE TO POM: [CCRUZ] - ADD (04-08-2025) on hold script, due to the capturing of dropdown boxes
   async selectionOfPagIbig() {
     await expect(this.Page).toHaveURL(/.*\/reports.*/);
-    const cellsLocator = this.Page.locator(
-      '//*[@id="app"]/div/div[3]/div[1]/div[2]/div/div[1]/table/tbody/tr/td'
+
+    const pagIbigRemittanceMenu = this.Page.locator(
+      `xpath=//table//tr[td//a[contains(., 'Pag-ibig Remittance')]]//a`
     );
 
-    const rowsCount = await cellsLocator.count();
-    const yearDropdown = this.Page.locator("#pv_id_3 div");
+    const yearDropdown = this.Page.getByRole("combobox", {
+      name: "Please select Year",
+    });
     const yearOptionVal = this.Page.getByRole("option", { name: "2025" });
-    const monthDropdown = this.Page.locator("#pv_id_4 div");
+    const monthDropdown = this.Page.getByRole("combobox", {
+      name: "Please select Month",
+    });
     const monthOptionVal = this.Page.getByRole("option", { name: "January" });
-    const employmentStatus = this.Page.locator("#pv_id_5 div");
+    const employmentStatus = this.Page.getByRole("combobox", {
+      name: "Please select Status",
+    });
     const employmentStatusVal = this.Page.getByRole("option", {
       name: "Contract of Service / Job",
     });
     const generateButton = this.Page.getByRole("button", { name: "Generate" });
 
-    for (let i = 0; i < rowsCount; i++) {
-      const rowLocator = cellsLocator.nth(i);
-      const cellText = await rowLocator.innerText();
-
-      if (cellText.includes("Pag-ibig")) {
-        const pagIbigClick = this.Page.locator(
-          '//*[@id="app"]/div/div[3]/div[1]/div[2]/div/div[1]/table/tbody/tr[2]/td/a'
-        );
-        await pagIbigClick.click();
-        await yearDropdown.click();
-        await yearOptionVal.click();
-        await monthDropdown.click();
-        await monthOptionVal.click();
-        await employmentStatus.click();
-        await employmentStatusVal.click();
-        await generateButton.click();
-        break;
-      }
-    }
+    await pagIbigRemittanceMenu.click();
+    await yearDropdown.click();
+    await yearOptionVal.click();
+    await monthDropdown.click();
+    await monthOptionVal.click();
+    await employmentStatus.click();
+    await employmentStatusVal.click();
+    await generateButton.click();
 
     await this.Page.waitForTimeout(2000);
   }
 
   async selectionOfPhilhealth() {
     await expect(this.Page).toHaveURL(/.*\/reports.*/);
-    const cellsLocator = this.Page.locator(
-      '//*[@id="app"]/div/div[3]/div[1]/div[2]/div/div[1]/table/tbody/tr/td'
-    );
 
-    const rowsCount = await cellsLocator.count();
+    const philHealthRemittanceMenu = this.Page.locator(
+      `xpath=//table//tr[td//a[contains(., 'Philhealth Remittance')]]//a`
+    );
     const yearDropdown = this.Page.getByRole("combobox", {
       name: "Please select Year",
     });
     const yearOptionVal = this.Page.getByRole("option", { name: "2025" });
-    const monthDropdown = this.Page.locator("#pv_id_2").getByRole("combobox", {
-      name: "Please select",
+    const monthDropdown = this.Page.getByRole("combobox", {
+      name: "Please select Month",
     });
     const monthOptionVal = this.Page.getByRole("option", { name: "January" });
-    const employmentStatus = this.Page.locator("#pv_id_3 div");
+    const employmentStatus = this.Page.getByRole("combobox", {
+      name: "Please select Employment",
+    });
     const employmentStatusVal = this.Page.getByRole("option", {
       name: "Contract of Service / Job",
     });
     const generateButton = this.Page.getByRole("button", { name: "Generate" });
 
-    for (let i = 0; i < rowsCount; i++) {
-      const rowLocator = cellsLocator.nth(i);
-      const cellText = await rowLocator.innerText();
+    await philHealthRemittanceMenu.click();
 
-      if (cellText.includes("Philhealth")) {
-        const pagIbigClick = this.Page.locator(
-          '//*[@id="app"]/div/div[3]/div[1]/div[2]/div/div[1]/table/tbody/tr[3]/td/a'
-        );
-        await pagIbigClick.click();
-        await yearDropdown.click();
-        await yearOptionVal.click();
-        await monthDropdown.isVisible();
-        await monthDropdown.click();
-        await monthOptionVal.click();
-        await employmentStatus.click();
-        await employmentStatusVal.click();
-        await generateButton.click();
+    await yearDropdown.click();
+    await yearOptionVal.click();
+    await monthDropdown.isVisible();
+    await monthDropdown.click();
 
-        break;
-      }
-    }
+    await monthOptionVal.click();
+    await employmentStatus.click();
+    await employmentStatusVal.click();
+    await generateButton.click();
 
     await this.Page.waitForTimeout(2000);
   }
 
   async selectionOfSSS() {
     await expect(this.Page).toHaveURL(/.*\/reports.*/);
-    const cellsLocator = this.Page.locator(
-      '//*[@id="app"]/div/div[3]/div[1]/div[2]/div/div[1]/table/tbody/tr/td'
-    );
 
-    const rowsCount = await cellsLocator.count();
+    const sssRemittanceMenu = this.Page.locator(
+      `xpath=//table//tr[td//a[contains(., 'SSS Remittance')]]//a`
+    );
 
     const yearDropdown = this.Page.getByRole("combobox", {
       name: "Please select Year",
@@ -164,47 +133,26 @@ export class ReportsPage {
     const monthOptionVal = this.Page.getByRole("option", { name: "January" });
     const generateButton = this.Page.getByRole("button", { name: "Generate" });
 
-    for (let i = 0; i < rowsCount; i++) {
-      const rowLocator = cellsLocator.nth(i);
-      const cellText = await rowLocator.innerText();
-
-      if (cellText.includes("SSS")) {
-        const sssClick = this.Page.locator(
-          '//*[@id="app"]/div/div[3]/div[1]/div[2]/div/div[1]/table/tbody/tr[4]/td/a'
-        );
-        await sssClick.click();
-        await yearDropdown.click();
-        await yearOptionVal.click();
-        await monthDropdown.click();
-        await monthOptionVal.click();
-        await generateButton.click();
-        break;
-      }
-    }
-
+    await sssRemittanceMenu.click();
+    await yearDropdown.click();
+    await yearOptionVal.click();
+    await monthDropdown.click();
+    await monthOptionVal.click();
+    await generateButton.click();
     await this.Page.waitForTimeout(2000);
   }
   //RESTRUCTURE TO POM: [CCRUZ] - END (04-08-2025) on hold script, due to the capturing of dropdown boxes
   async requiredFields() {
     await expect(this.Page).toHaveURL(/.*\/reports.*/);
-    const rowsCount = await this.cellsLocator.count();
 
-    for (let i = 0; i < rowsCount; i++) {
-      const rowLocator = this.cellsLocator.nth(i);
-      const cellText = await rowLocator.innerText();
+    const sssRemittanceMenu = this.Page.locator(
+      `xpath=//table//tr[td//a[contains(., 'SSS Remittance')]]//a`
+    );
 
-      if (cellText.includes("Pag-ibig")) {
-        const pagIbigClick = this.Page.locator(
-          '//*[@id="app"]/div/div[3]/div[1]/div[2]/div/div[1]/table/tbody/tr[2]/td/a'
-        );
-        await pagIbigClick.click();
-        await this.generateButton.click();
-        await expect(this.modalMessageError).toContainText(
-          "All fields required"
-        );
-        break;
-      }
-    }
+    await sssRemittanceMenu.click();
+    await this.generateButton.click();
+    await expect(this.modalMessageError).toContainText("All fields required");
+
     await this.Page.waitForTimeout(2000);
   }
 }

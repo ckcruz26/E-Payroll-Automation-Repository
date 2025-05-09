@@ -9,9 +9,11 @@ test.describe("Personnel Profile Suite", () => {
   test.use({
     storageState: path.resolve(__dirname, "../auth/auth.json"),
   });
+  
+  const url = String(process.env.URL);
 
   test.beforeEach(async ({ page }) => {
-    await page.goto("http://172.31.32.64:70/personnel-management");
+    await page.goto(`${url}personnel-management`);
   });
 
   test.afterEach(async ({ page }) => {
@@ -43,7 +45,10 @@ test.describe("Personnel Profile Suite", () => {
     await personnelProfile.searchEmployeesByEmploymentStatus();
   });
 
-  test("E-PAYROLL_PERSONNEL_PROFILE_006", async ({ page }) => {});
+  test("E-PAYROLL_PERSONNEL_PROFILE_006", async ({ page }) => {
+    const personnelProfile = new PersonnelProfile(page);
+    await personnelProfile.clearFilterButton();
+  });
 
   test("E-PAYROLL_PERSONNEL_PROFILE_007", async ({ page }) => {
     const personnelProfile = new PersonnelProfile(page);
@@ -70,18 +75,9 @@ test.describe("Personnel Profile Suite", () => {
     await personnelProfile.optionalDeductionsView();
   });
 
-  test.skip("E-PAYROLL_PERSONNEL_PROFILE_012", async ({ page }) => {
-    const personnelProfile = new PersonnelProfile(page);
-    await personnelProfile.inputOptionalDeductions();
-  });
-
   test("E-PAYROLL_PERSONNEL_PROFILE_013", async ({ page }) => {
     const personnelProfile = new PersonnelProfile(page);
     await personnelProfile.skipOptionalDeductionsRequiredFields();
   });
 
-  test.skip("E-PAYROLL_PERSONNEL_PROFILE_014", async ({ page }) => {
-    const personnelProfile = new PersonnelProfile(page);
-    await personnelProfile.updateOptionalDeductions();
-  });
 });

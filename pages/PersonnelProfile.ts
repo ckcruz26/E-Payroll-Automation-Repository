@@ -35,6 +35,7 @@ export class PersonnelProfile {
 
   readonly searchButton: Locator;
   readonly summaryDownload: Locator;
+  readonly clearFilter : Locator;
 
   readonly deductionModalView: Locator;
 
@@ -114,6 +115,8 @@ export class PersonnelProfile {
     this.searchEmploymentStatusDropdownValue = page.getByRole("option", {
       name: "CONTRACT OF SERVICE",
     });
+
+    this.clearFilter = page.getByRole("button", { name: "Clear" });
 
     this.searchButton = page.getByRole("button", { name: "Search" });
     this.summaryDownload = page.locator(
@@ -196,6 +199,14 @@ export class PersonnelProfile {
     await this.searchEmploymentStatusDropdownValue.click();
   }
 
+  async clearFilterButton() {
+    await expect(this.Page).toHaveURL(/.*\/personnel-management.*/);
+    await this.searchFundSourceDropdown.click();
+    await this.searchFundSourceDropdownValue.click();
+    await this.clearFilter.click();
+    await this.Page.waitForTimeout(2000);
+  }
+
   async downloadSummary() {
     await expect(this.Page).toHaveURL(/.*\/personnel-management.*/);
     await this.summaryDownload.click();
@@ -208,6 +219,7 @@ export class PersonnelProfile {
     await this.searchButton.click();
     await this.Page.waitForTimeout(2000);
     await this.deductionModalView.click();
+    await this.Page.waitForTimeout(2000);
   }
 
   async inputDeduction() {
@@ -294,7 +306,7 @@ export class PersonnelProfile {
     await this.healthcard.fill("");
     await this.sss.fill("");
     await this.Page.waitForTimeout(2000);
-    // await this.messageSuccess.waitFor({ state: "visible" });
+
   }
 
   async optionalDeductionsView() {
@@ -303,47 +315,6 @@ export class PersonnelProfile {
     await this.Page.waitForTimeout(2000);
     await this.deductionModalView.click();
     await this.optionalDeductionBttn.click();
-  }
-
-  async inputOptionalDeductions() {
-    // Step 1: Search and open modal
-    await this.searchFieldFirstName.fill(this.searchFieldNameArr[1]);
-    await this.searchButton.click();
-    await this.Page.waitForTimeout(2000);
-    await this.deductionModalView.click();
-    await this.optionalDeductionBttn.click();
-    await this.deductionTypeOption.click();
-    await this.deductionTypeOptionValue.click();
-
-    // Step 4: Enter total amount
-    await this.totalAmountValue.waitFor({ state: "visible" });
-    await this.totalAmountValue.click();
-    await this.totalAmountValue.pressSequentially(
-      this.randomValueMoney.toString()
-    );
-    await this.totalAmountValue.press("Tab");
-
-    // Step 5: Enter monthly deduction
-    await this.monthlyDeduction.waitFor({ state: "visible" });
-    await this.monthlyDeduction.click();
-    await this.monthlyDeduction.pressSequentially(
-      this.randomValueMoney.toString()
-    );
-    await this.monthlyDeduction.press("Tab");
-
-    // Step 1: Open the first date picker and select the start date
-    //start
-    await this.Page.locator("xpath=//*[@id='pv_id_22']/button")
-      .getByRole("button", { name: "Choose Date" })
-      .click();
-    await this.Page.getByRole("gridcell", { name: "16" }).click();
-    //end
-    await this.Page.locator("xpath=//*[@id='pv_id_23']/button").click();
-    await this.Page.getByRole("gridcell", { name: "23" }).click();
-
-    // Step 8: Save
-    await this.buttonSaveOptionalDeduction.waitFor({ state: "visible" });
-    await this.buttonSaveOptionalDeduction.click();
   }
 
   async skipOptionalDeductionsRequiredFields() {
