@@ -3,7 +3,7 @@ import { test, expect } from "@playwright/test";
 import path from "path";
 import { PayrollManagerPage } from "../pages/PayrollManagerPage";
 
-test.describe.configure({ mode: "parallel" });
+test.describe.configure({ mode: 'parallel' });
 
 test.describe("Payroll Manager Suite", () => {
   test.use({

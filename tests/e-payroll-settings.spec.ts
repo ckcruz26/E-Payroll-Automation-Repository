@@ -2,7 +2,7 @@ import { test, expect } from "@playwright/test";
 import { base, faker } from "@faker-js/faker";
 import path from "path";
 
-test.describe.configure({ mode: "parallel" });
+test.describe.configure({ mode: 'parallel' });
 
 test.describe("Settings Suite", () => {
   test.use({
@@ -192,7 +192,7 @@ test.describe("Settings Suite", () => {
       const rowLocator = tableCells.nth(i);
       const cellText = await rowLocator.innerText();
 
-      if (regexSalaryTableMOA.test(cellText)) {
+      if (cellText.match(regexSalaryTableMOA)) {
         await salaryGradeEdit.click();
         tableEditFlag = 1;
         break;
@@ -213,6 +213,7 @@ test.describe("Settings Suite", () => {
       const verifySaveChangeText = page.getByText(
         "Are you sure you want to proceed?"
       );
+      const saveButtonSG = page.getByRole("button", { name: "Yes" });
       const modalSuccess = page.getByText("Salary Grade updated");
 
       const stringValueMoney = randomValueMoney.toString();
@@ -236,6 +237,7 @@ test.describe("Settings Suite", () => {
 
       await saveButtonSalaryGrade.click();
       await verifySaveChangeText.isVisible();
+      await saveButtonSG.click();
       await modalSuccess.isVisible();
       await page.waitForTimeout(1000);
     }
@@ -286,6 +288,7 @@ test.describe("Settings Suite", () => {
       const verifySaveChangeText = page.getByText(
         "Are you sure you want to proceed?"
       );
+
       const modalErrMsg = page
         .locator("div")
         .filter({ hasText: /^Please fill-up all required fields$/ })
@@ -299,6 +302,7 @@ test.describe("Settings Suite", () => {
       await page.waitForTimeout(1000);
       await saveButtonSalaryGrade.click();
       await verifySaveChangeText.isVisible();
+
       await modalErrMsg.isVisible();
       await page.waitForTimeout(1000);
     }
@@ -383,7 +387,7 @@ test.describe("Settings Suite", () => {
       const rowLocator = dueductionCells.nth(i);
       const cellText = await rowLocator.innerText();
 
-      if (regexDeductionName.test(cellText)) {
+      if (cellText.match(regexDeductionName)) {
         await editButton.click();
         break;
       }
@@ -410,7 +414,7 @@ test.describe("Settings Suite", () => {
       const rowLocator = dueductionCells.nth(i);
       const cellText = await rowLocator.innerText();
 
-      if (regexDeductionName.test(cellText)) {
+      if (cellText.match(regexDeductionName)) {
         await editButton.click();
         tableEditFlag = 1;
         break;
@@ -441,10 +445,6 @@ test.describe("Settings Suite", () => {
       await editDialogSaveButton.click();
       await alertDialogSaveButton.click();
       await textUpdate.isVisible();
-
-      // await page.getByRole('dialog', { name: 'Edit Deduction' }).getByRole('textbox').fill('deduction type faker');
-      // await page.getByRole('button', { name: 'Save' }).click();
-      // await page.getByRole('alertdialog', { name: 'Confirmation' }).getByLabel('Save').click();
     }
   });
 
@@ -468,7 +468,7 @@ test.describe("Settings Suite", () => {
       const rowLocator = dueductionCells.nth(i);
       const cellText = await rowLocator.innerText();
 
-      if (regexDeductionName.test(cellText)) {
+      if (cellText.match(regexDeductionName)) {
         await editButton.click();
         tableEditFlag = 1;
         break;
@@ -521,7 +521,7 @@ test.describe("Settings Suite", () => {
       const rowLocator = dueductionCells.nth(i);
       const cellText = await rowLocator.innerText();
 
-      if (regexDeductionName.test(cellText)) {
+      if (cellText.match(regexDeductionName)) {
         await editButton.click();
         tableEditFlag = 1;
         break;
@@ -529,12 +529,6 @@ test.describe("Settings Suite", () => {
     }
 
     if (tableEditFlag == 1) {
-      // const deductionEditNameField = page
-      //   .getByRole("dialog", { name: "Add Deduction" })
-      //   .getByRole("textbox");
-      const deductionEditNameField = page.locator(
-        "xpath=/html/body/div[3]/div/div[2]/div[1]/div[1]/input"
-      );
       const dialogStatusDeductionStatusDropdownBox = page.getByRole(
         "combobox",
         { name: "Active" }
@@ -694,9 +688,6 @@ test.describe("Settings Suite", () => {
 
   test("E-PAYROLL_SETTINGS_028", async ({ page }) => {
     await goToLink(page, "user-access");
-    // await page.waitForSelector(
-    //   '//*[@id="app"]/div/div[3]/div[1]/div[2]/div/div[1]/table/tbody/tr/td'
-    // );
     const editButton = page.locator(
       '//*[@id="app"]/div/div[3]/div[1]/div[2]/div/div[1]/table/tbody/tr[1]/td[6]/button'
     );
@@ -758,5 +749,13 @@ test.describe("Settings Suite", () => {
       await option.click();
       await page.waitForTimeout(500);
     }
+  });
+
+  /*
+  [CCRUZ] - ADD (05-13-2025) - AUDIT TRAIL FEATURE TEST SCRIPT
+  */
+  test("E-PAYROLL_SETTINGS_031", async ({ page }) => {
+    await goToLink(page, "audit-trail");
+    await expect(page).toHaveURL(/.*\/audit-trail.*/);
   });
 });

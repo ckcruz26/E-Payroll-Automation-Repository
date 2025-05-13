@@ -2,7 +2,7 @@ import { test, expect } from "@playwright/test";
 import path from "path";
 import { DashboardPage } from "../pages/DashboardPage";
 
-test.describe.configure({ mode: "parallel" });
+test.describe.configure({ mode: 'parallel' });
 
 test.describe("Dashboard Suite", () => {
   test.use({

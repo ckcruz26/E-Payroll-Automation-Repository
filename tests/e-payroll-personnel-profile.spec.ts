@@ -3,7 +3,7 @@ import { test, expect } from "@playwright/test";
 import path from "path";
 import { PersonnelProfile } from "../pages/PersonnelProfile";
 
-test.describe.configure({ mode: "parallel" });
+test.describe.configure({ mode: 'parallel' });
 
 test.describe("Personnel Profile Suite", () => {
   test.use({

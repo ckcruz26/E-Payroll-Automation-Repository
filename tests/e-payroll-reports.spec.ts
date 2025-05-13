@@ -3,9 +3,10 @@ import { test, expect } from "@playwright/test";
 import path from "path";
 import { ReportsPage } from "../pages/ReportsPage";
 
-test.describe.configure({ mode: "parallel" });
+test.describe.configure({ mode: 'parallel' });
 
 test.describe("Reports Suite", () => {
+  
   test.use({
     storageState: path.resolve(__dirname, "../auth/auth.json"),
   });

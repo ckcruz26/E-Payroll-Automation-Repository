@@ -1,5 +1,5 @@
 import { defineConfig, devices } from "@playwright/test";
-import dotenv from 'dotenv';
+import dotenv from "dotenv";
 
 dotenv.config();
 /**
@@ -10,19 +10,18 @@ export default defineConfig({
   fullyParallel: true,
   forbidOnly: !!process.env.CI,
   retries: process.env.CI ? 2 : 0,
-  workers: process.env.CI ? 1 : undefined,
+  workers: 4, // 👈 Use 4 workers explicitly
+  // workers: process.env.CI ? 1 : undefined,
   reporter: [["html", { outputFolder: "./playwright-report", open: "never" }]],
   // timeout: 60000,
   use: {
     launchOptions: {
       args: ["--start-maximized"],
       //  slowMo: 2000,
-      headless: false,
-      
+      headless: true,
     },
-    //trace: "on-first-retry", // Optional: Enables tracing for debugging
+    //trace: "on-first-retry",
     ignoreHTTPSErrors: true,
-    // actionTimeout: 10_000 
     trace: "off",
     //actionTimeout: 5000,
     video: "on",
@@ -32,28 +31,13 @@ export default defineConfig({
   /* Configure projects for major browsers */
   projects: [
     {
-      name: "chrome",
       use: {
-        viewport: null,
-        deviceScaleFactor: undefined,
-        // storageState : "./auth/auth.json"
+        browserName: "chromium",
+        viewport: { width: 1920, height: 1080 }, // ✅ explicit size
+        isMobile: false,
+        hasTouch: false,
+        deviceScaleFactor: 1, // full screen (start-maximized will apply)
       },
     },
-    // Uncomment if you want to test other browsers
-    // {
-    //   name: 'firefox',
-    //   use: { ...devices['Desktop Firefox'] },
-    // },
-    // {
-    //   name: 'webkit',
-    //   use: { ...devices['Desktop Safari'] },
-    // },
   ],
-
-  /* Optional: Run your local dev server before starting the tests */
-  // webServer: {
-  //   command: 'npm run start',
-  //   url: 'http://127.0.0.1:3000',
-  //   reuseExistingServer: !process.env.CI,
-  // },
 });
