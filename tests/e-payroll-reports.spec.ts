@@ -41,7 +41,7 @@ test.describe("Reports Suite", () => {
     await reports.selectionOfPagIbig();
   });
 
-  test.only("E-PAYROLL_REPORTS_005", async ({ page }) => {
+  test("E-PAYROLL_REPORTS_005", async ({ page }) => {
     const reports = new ReportsPage(page);
     await reports.selectionOfPhilhealth();
   });

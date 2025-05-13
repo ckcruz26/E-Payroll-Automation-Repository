@@ -7,13 +7,12 @@ dotenv.config();
  */
 export default defineConfig({
   testDir: "./tests",
+  timeout :60000, 
   fullyParallel: true,
   forbidOnly: !!process.env.CI,
   retries: process.env.CI ? 2 : 0,
-  workers: 4, // 👈 Use 4 workers explicitly
-  // workers: process.env.CI ? 1 : undefined,
+  workers: process.env.CI ? 1 : undefined,
   reporter: [["html", { outputFolder: "./playwright-report", open: "never" }]],
-  // timeout: 60000,
   use: {
     launchOptions: {
       args: ["--start-maximized"],
@@ -33,10 +32,10 @@ export default defineConfig({
     {
       use: {
         browserName: "chromium",
-        viewport: { width: 1920, height: 1080 }, // ✅ explicit size
+        viewport: null, // ✅ explicit size
         isMobile: false,
         hasTouch: false,
-        deviceScaleFactor: 1, // full screen (start-maximized will apply)
+        deviceScaleFactor: undefined, // full screen (start-maximized will apply)
       },
     },
   ],

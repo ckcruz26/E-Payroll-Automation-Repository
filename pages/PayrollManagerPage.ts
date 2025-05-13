@@ -202,10 +202,7 @@ export class PayrollManagerPage {
   }
 
   async createPayroll() {
-    await this.payrollCreateButton.waitFor({
-      state: "visible",
-      timeout: 10000,
-    });
+
     await this.payrollCreateButton.click();
 
     await this.Page.locator("#prGroup").click();
@@ -230,21 +227,20 @@ export class PayrollManagerPage {
     await this.Page.locator("#pv_id_10 #year").click();
     await this.Page.getByRole("option", { name: "Salary" }).click();
 
-    await this.month.waitFor({ state: "visible", timeout: 10000 });
+    await this.month.waitFor({ state: "visible" });
     await this.month.click();
     await this.monthVal.click();
     await this.Page.locator("#batch").click();
     await this.Page.getByRole("option", { name: "00" }).click();
-    await this.createPayrollBtn.waitFor({ state: "visible", timeout: 10000 });
+    await this.createPayrollBtn.waitFor({ state: "visible"});
     await this.createPayrollBtn.click();
 
     await this.bulkCheckOfEmployee.waitFor({
       state: "visible",
-      timeout: 10000,
     });
     await this.bulkCheckOfEmployee.click();
 
-    await this.createPayrollModal.waitFor({ state: "visible", timeout: 10000 });
+    await this.createPayrollModal.waitFor({ state: "visible"});
     await this.createPayrollModal.click();
     await this.Page.waitForTimeout(2000);
   }

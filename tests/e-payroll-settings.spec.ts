@@ -2,7 +2,7 @@ import { test, expect } from "@playwright/test";
 import { base, faker } from "@faker-js/faker";
 import path from "path";
 
-test.describe.configure({ mode: 'parallel' });
+test.describe.configure({ mode: "parallel" });
 
 test.describe("Settings Suite", () => {
   test.use({
@@ -180,10 +180,6 @@ test.describe("Settings Suite", () => {
       '//*[@id="app"]/div/div[3]/div[1]/div[2]/div/div[1]/table/tbody/tr/td'
     );
 
-    const salaryGradeEdit = page
-      .getByRole("row", { name: regexSalaryTableMOA })
-      .getByLabel("Edit");
-
     const rowsCount = await tableCells.count();
 
     let tableEditFlag = 0;
@@ -193,6 +189,13 @@ test.describe("Settings Suite", () => {
       const cellText = await rowLocator.innerText();
 
       if (cellText.match(regexSalaryTableMOA)) {
+        const salaryGradeEdit = page
+          .locator(
+            `xpath=//table//tr[td[contains(normalize-space(), "${cellText}")]]`
+          )
+          .first() // ← this ensures only the first matching row is used
+          .locator(`xpath=.//button[.//span[contains(text(), "Edit")]]`);
+
         await salaryGradeEdit.click();
         tableEditFlag = 1;
         break;
@@ -256,10 +259,6 @@ test.describe("Settings Suite", () => {
       '//*[@id="app"]/div/div[3]/div[1]/div[2]/div/div[1]/table/tbody/tr/td'
     );
 
-    const salaryGradeEdit = page
-      .getByRole("row", { name: regexSalaryTableMOA })
-      .getByLabel("Edit");
-
     const rowsCount = await tableCells.count();
 
     let tableEditFlag = 0;
@@ -269,6 +268,13 @@ test.describe("Settings Suite", () => {
       const cellText = await rowLocator.innerText();
 
       if (regexSalaryTableMOA.test(cellText)) {
+        const salaryGradeEdit = page
+          .locator(
+            `xpath=//table//tr[td[contains(normalize-space(), "${cellText}")]]`
+          )
+          .first() // ← this ensures only the first matching row is used
+          .locator(`xpath=.//button[.//span[contains(text(), "Edit")]]`);
+
         await salaryGradeEdit.click();
         tableEditFlag = 1;
         break;
@@ -285,6 +291,7 @@ test.describe("Settings Suite", () => {
       const saveButtonSalaryGrade = page.locator(
         "xpath=/html/body/div[2]/div/div[2]/div[4]/button[2]"
       );
+
       const verifySaveChangeText = page.getByText(
         "Are you sure you want to proceed?"
       );
@@ -302,7 +309,6 @@ test.describe("Settings Suite", () => {
       await page.waitForTimeout(1000);
       await saveButtonSalaryGrade.click();
       await verifySaveChangeText.isVisible();
-
       await modalErrMsg.isVisible();
       await page.waitForTimeout(1000);
     }
@@ -542,7 +548,6 @@ test.describe("Settings Suite", () => {
         .getByLabel("Save");
       const textUpdate = page.getByText("Information has been saved");
 
-      // await deductionEditNameField.fill(deductionName);
       await dialogStatusDeductionStatusDropdownBox.click();
       await dialogStatusDeductionStatusValue.click();
       await editDialogSaveButton.click();
