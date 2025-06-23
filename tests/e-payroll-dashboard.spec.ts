@@ -1,6 +1,5 @@
-import { test, expect } from "@playwright/test";
+import { test} from "../fixtures/DashboardFixtures";
 import path from "path";
-import { DashboardPage } from "../pages/DashboardPage";
 
 test.describe.configure({ mode: 'parallel' });
 
@@ -19,14 +18,12 @@ test.describe("Dashboard Suite", () => {
     await page.close(); // closes the current page after each test
   });
 
-  test("E-PAYROLL_DASHBOARD_001", async ({ page }) => {
-    const dashboard = new DashboardPage(page);
-    await dashboard.verifyDashboardPage();
+  test("E-PAYROLL_DASHBOARD_001", async ({ dashboardPage }) => {
+    await dashboardPage.verifyDashboardPage();
   });
 
-  test("E-PAYROLL_DASHBOARD_002", async ({ page }) => {
-    const dashboard = new DashboardPage(page);
-    await dashboard.clickViewAll();
-    await dashboard.verifyPayrollManagementPage();
+  test("E-PAYROLL_DASHBOARD_002", async ({ dashboardPage }) => {
+    await dashboardPage.clickViewAll();
+    await dashboardPage.verifyPayrollManagementPage();
   });
 });

@@ -17,7 +17,7 @@ export default defineConfig({
     launchOptions: {
       args: ["--start-maximized"],
       //  slowMo: 2000,
-      headless: true,
+      headless: false,
     },
     //trace: "on-first-retry",
     ignoreHTTPSErrors: true,
