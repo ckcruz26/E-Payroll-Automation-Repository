@@ -104,7 +104,7 @@ export class PayrollManagerPage {
     this.batchVal = page.getByRole("option", { name: "00" });
 
     this.cutOff = page.locator("//*[@id=cutOff]");
-    this.cutOffVal = page.getByRole("option", { name: "1-15" });
+    this.cutOffVal = page.getByRole("option", { name: "1st Cut-off" });
 
     this.createPayrollBtn = page.getByRole("button", {
       name: "Create Payroll",
@@ -219,7 +219,7 @@ export class PayrollManagerPage {
       name: "CONTRACT OF SERVICE",
     }).click();
     await this.Page.locator("#cutOff").click();
-    await this.Page.getByRole("option", { name: "1-15" }).click();
+    await this.Page.getByRole("option", { name: "1st Cut-off" }).click();
     await this.Page.locator("#pv_id_9 #year").click();
     await this.Page.getByRole("searchbox").fill("2025");
     await this.Page.getByRole("option", { name: "2025" }).click();

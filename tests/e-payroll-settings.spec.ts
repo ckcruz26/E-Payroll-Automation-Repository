@@ -129,7 +129,7 @@ test.describe("Settings Suite", () => {
     await settingsPage.uploadInvalidDeductionsFile();
   });
 
-  test("E-PAYROLL_SETTINGS_022", async ({ settingsPage }) => {
+  test("E-PAYROLL_SETTINGS_022" , async ({ settingsPage }) => {
     await goToLink(settingsPage, "optional-deductions");
     await settingsPage.downloadTemplateOptionalDeductions();
   });
