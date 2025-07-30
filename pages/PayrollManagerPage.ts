@@ -242,6 +242,22 @@ export class PayrollManagerPage {
 
     await this.createPayrollModal.waitFor({ state: "visible"});
     await this.createPayrollModal.click();
+
+    await this.Page.locator("div")
+      .filter({ hasText: /^Confirmation$/ })
+      .waitFor({
+        state: "visible",
+      });
+
+    await this.Page.getByRole("button", { name: "Yes" }).waitFor({
+      state: "visible",
+    });
+
+    await this.Page.getByRole("button", { name: "Yes" }).click();
+
+    await this.Page.waitForTimeout(2000);
+
+    
     await this.Page.waitForTimeout(2000);
   }
 
